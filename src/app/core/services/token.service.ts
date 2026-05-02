@@ -5,5 +5,21 @@ import { Injectable } from '@angular/core';
 })
 export class TokenService {
 
-  constructor() { }
+  private TOKEN_KEY = 'accessToken';
+
+  setToken(token: string) {
+    localStorage.setItem(this.TOKEN_KEY, token);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem(this.TOKEN_KEY);
+  }
+
+  clearToken() {
+    localStorage.removeItem(this.TOKEN_KEY);
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.getToken();
+  }
 }
