@@ -1,0 +1,173 @@
+<div class="layout" [class.sidebar-collapsed]="!sidebarOpen">
+
+  <!-- Mobile overlay -->
+  <div class="sidebar-overlay" [class.visible]="mobileMenuOpen" (click)="closeMobileMenu()">
+  </div>
+
+  <!-- ─── SIDEBAR ─── -->
+  <aside class="sidebar" [class.collapsed]="!sidebarOpen" [class.mobile-open]="mobileMenuOpen">
+
+    <!-- Logo -->
+    <div class="sb-top">
+      <div class="sb-logo-icon">
+        <mat-icon>school</mat-icon>
+      </div>
+      <span class="sb-logo-text">BrightClass</span>
+    </div>
+
+    <!-- Nav sections -->
+    <div class="sb-scroll">
+      <div class="sb-section">
+        <span class="sb-section-label">Main</span>
+
+        <a class="nav-item" routerLink="/admin/dashboard" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }" (click)="onNavClick()">
+          <mat-icon>dashboard</mat-icon>
+          <span class="nav-label">Dashboard</span>
+          <span class="nav-tooltip">Dashboard</span>
+        </a>
+
+        <a class="nav-item" routerLink="/admin/courses" routerLinkActive="active" (click)="onNavClick()">
+          <mat-icon>auto_stories</mat-icon>
+          <span class="nav-label">Courses</span>
+          <span class="nav-tooltip">Courses</span>
+        </a>
+
+        <a class="nav-item" routerLink="/admin/enrollment" routerLinkActive="active" (click)="onNavClick()">
+          <mat-icon>people</mat-icon>
+          <span class="nav-label">Enrollments</span>
+          @if (pendingCount > 0) {
+          <span class="nav-badge">{{ pendingCount }}</span>
+          }
+          <span class="nav-tooltip">Enrollments</span>
+        </a>
+
+        <a class="nav-item" routerLink="/admin/payments" routerLinkActive="active" (click)="onNavClick()">
+          <mat-icon>payments</mat-icon>
+          <span class="nav-label">Payments</span>
+          <span class="nav-tooltip">Payments</span>
+        </a>
+      </div>
+
+      <div class="sb-section">
+        <span class="sb-section-label">Manage</span>
+
+        <a class="nav-item" routerLink="/admin/students" routerLinkActive="active" (click)="onNavClick()">
+          <mat-icon>school</mat-icon>
+          <span class="nav-label">Students</span>
+          <span class="nav-tooltip">Students</span>
+        </a>
+
+        <a class="nav-item" routerLink="/admin/reports" routerLinkActive="active" (click)="onNavClick()">
+          <mat-icon>bar_chart</mat-icon>
+          <span class="nav-label">Reports</span>
+          <span class="nav-tooltip">Reports</span>
+        </a>
+
+        <a class="nav-item" routerLink="/admin/settings" routerLinkActive="active" (click)="onNavClick()">
+          <mat-icon>settings</mat-icon>
+          <span class="nav-label">Settings</span>
+          <span class="nav-tooltip">Settings</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- User profile at bottom -->
+    <div class="sb-bottom">
+      <div class="sb-user" (click)="logout()">
+        <div class="sb-avatar">{{ userInitials }}</div>
+        <div class="sb-user-info">
+          <div class="sb-user-name">{{ userName }}</div>
+          <div class="sb-user-role">Administrator</div>
+        </div>
+        <mat-icon class="sb-logout-icon">logout</mat-icon>
+        <span class="nav-tooltip">Logout</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ─── MAIN AREA ─── -->
+  <div class="main">
+
+    <!-- Header -->
+    <header class="header">
+      <button class="toggle-btn" (click)="toggleSidebar()" aria-label="Toggle sidebar">
+        <mat-icon>{{ sidebarOpen ? 'menu_open' : 'menu' }}</mat-icon>
+      </button>
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <span class="bc-root">BrightClass</span>
+        <mat-icon class="bc-sep">chevron_right</mat-icon>
+        <span class="bc-current">{{ currentPageTitle }}</span>
+      </nav>
+
+      <!-- Right actions -->
+      <div class="header-right">
+        <button class="icon-btn" aria-label="Search">
+          <mat-icon>search</mat-icon>
+        </button>
+
+        <button class="icon-btn notif-btn" aria-label="Notifications">
+          <mat-icon>notifications</mat-icon>
+          @if (notifCount > 0) {
+          <span class="notif-dot"></span>
+          }
+        </button>
+
+        <div class="hdr-divider"></div>
+
+        <div class="user-chip" (click)="toggleUserMenu()" #userMenuTrigger>
+          <div class="hdr-avatar">{{ userInitials }}</div>
+          <span class="hdr-username">{{ userDisplayName }}</span>
+          <mat-icon class="chevron">expand_more</mat-icon>
+
+          @if (userMenuOpen) {
+          <div class="user-dropdown">
+            <div class="user-dropdown-header">
+              <div class="ud-avatar">{{ userInitials }}</div>
+              <div>
+                <div class="ud-name">{{ userName }}</div>
+                <div class="ud-email">{{ userEmail }}</div>
+              </div>
+            </div>
+            <div class="ud-divider"></div>
+            <a class="ud-item" routerLink="/admin/settings">
+              <mat-icon>manage_accounts</mat-icon> Profile settings
+            </a>
+            <button class="ud-item ud-logout" (click)="logout()">
+              <mat-icon>logout</mat-icon> Sign out
+            </button>
+          </div>
+          }
+        </div>
+      </div>
+    </header>
+
+    <!-- Page content -->
+    <main class="content" role="main">
+      <router-outlet></router-outlet>
+    </main>
+
+    <!-- Mobile bottom navigation -->
+    <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+      <a class="mob-item" routerLink="/admin/dashboard" routerLinkActive="active">
+        <mat-icon>dashboard</mat-icon>
+        <span>Home</span>
+      </a>
+      <button class="mob-item" (click)="openMobileMenu()">
+        <mat-icon>menu</mat-icon>
+        <span>Menu</span>
+      </button>
+      <a class="mob-item" routerLink="/admin/enrollment" routerLinkActive="active">
+        <mat-icon>people</mat-icon>
+        <span>Users</span>
+      </a>
+      <a class="mob-item" routerLink="/admin/settings" routerLinkActive="active">
+        <mat-icon>person</mat-icon>
+        <span>Profile</span>
+      </a>
+    </nav>
+
+  </div>
+</div>
