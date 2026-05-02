@@ -19,6 +19,8 @@ export class AuthService {
     return this.api.login(data).pipe(
       tap((res) => {
         this.tokenService.setToken(res.data.token);
+        localStorage.setItem('userRole', res.data.role);
+        localStorage.setItem('userEmail', res.data.email);
       }),
     );
   }

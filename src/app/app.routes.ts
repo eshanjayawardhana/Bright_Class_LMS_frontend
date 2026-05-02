@@ -2,11 +2,12 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './features/auth/pages/login/login.component';
 import { RegisterComponent } from './features/auth/pages/register/register.component';
 import { authGuard } from './core/guards/auth.guard';
+import { roleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
   {
     path: 'dashboard',
-    canActivate: [authGuard],
+    canActivate: [authGuard,roleGuard(['ADMIN'])],
     loadComponent: () =>
       import('./features/dashboard/pages/admin-dashboard/admin-dashboard.component')
         .then(m => m.AdminDashboardComponent)
