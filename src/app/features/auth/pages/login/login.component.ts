@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../../../core/services/auth.service';
 import { ROLES } from '../../../../core/constants/roles';
+import { ToastService } from '../../../../core/services/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -28,6 +29,7 @@ import { ROLES } from '../../../../core/constants/roles';
 })
 export class LoginComponent {
   private fb = inject(FormBuilder);
+  private toastService = inject(ToastService);
 
   // private authService = inject(AuthService);
   // private router = inject(Router);
@@ -58,6 +60,8 @@ export class LoginComponent {
     this.authService.login(this.loginForm.getRawValue()).subscribe({
       next: (res) => {
         this.isLoading = false;
+
+        this.toastService.success('You have successfully logged in.', 'Welcome Back!');
         
         const role = res.data.role;
 

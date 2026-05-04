@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 @import 'assets/styles/main';
+@import 'ngx-toastr/toastr';
+
 
 html,
 body {
@@ -18,4 +20,38 @@ body {
   box-shadow: theme('boxShadow.md') !important;
   border-radius: theme('borderRadius.xl') !important;
   border: none !important;
+}
+
+/* GLOBAL DESIGN TOKENS */
+:root {
+  --sidebar-w: 240px;
+  --sidebar-mini: 64px;
+  --header-h: 60px;
+  --mobile-nav-h: 56px;
+
+  --bg: #f4f6fb;
+  --card: #ffffff;
+  --border: #e8edf5;
+  
+  --sb-bg: #0f172a;
+  --sb-hover: #1e293b;
+  --sb-active: #1d4ed8;
+  --sb-border: rgba(255, 255, 255, 0.06);
+  --sb-text: #94a3b8;
+  --sb-text-active: #f8fafc;
+  --sb-label: #475569;
+
+  --text: #0f172a;
+  --text-muted: #64748b;
+  --text-dim: #94a3b8;
+
+  --accent: #2563eb;
+  --accent-light: #eff6ff;
+
+  --radius: 10px;
+  --radius-lg: 14px;
+  
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 16px rgba(15, 23, 42, 0.1);
+  --shadow-lg: 0 8px 40px rgba(15, 23, 42, 0.14);
 }

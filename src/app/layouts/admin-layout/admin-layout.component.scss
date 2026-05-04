@@ -1,39 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap');
 
-/* ── Design tokens ── */
-:host {
-  --sidebar-w: 240px;
-  --sidebar-mini: 64px;
-  --header-h: 60px;
-  --mobile-nav-h: 56px;
 
-  --bg: #f4f6fb;
-  --card: #ffffff;
-  --border: #e8edf5;
-
-  --sb-bg: #0f172a;
-  --sb-hover: #1e293b;
-  --sb-active: #1d4ed8;
-  --sb-border: rgba(255, 255, 255, .06);
-  --sb-text: #94a3b8;
-  --sb-text-active: #f8fafc;
-  --sb-label: #475569;
-
-  --text: #0f172a;
-  --text-muted: #64748b;
-  --text-dim: #94a3b8;
-
-  --accent: #2563eb;
-  --accent-light: #eff6ff;
-
-  --font: 'Geist', sans-serif;
-  --ease: cubic-bezier(.4, 0, .2, 1);
-  --radius: 10px;
-  --radius-lg: 14px;
-  --shadow-sm: 0 1px 3px rgba(15, 23, 42, .08), 0 1px 2px rgba(15, 23, 42, .04);
-  --shadow-md: 0 4px 16px rgba(15, 23, 42, .1);
-  --shadow-lg: 0 8px 40px rgba(15, 23, 42, .14);
-}
 
 /* ── Base ── */
 *,
