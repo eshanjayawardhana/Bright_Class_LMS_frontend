@@ -14,6 +14,12 @@ import { LayoutService } from '../../core/services/layout.service';
 import { AuthService } from '../../core/services/auth.service';
 import { UserService } from '../../core/services/user.service';
 import { PAGE_TITLES } from '../../core/constants/page-titles';
+import { MENU_ITEMS, MenuItem } from '../../core/constants/menu.config';
+
+interface MenuGroup {
+  section: string;
+  items: MenuItem[];
+}
 
 @Component({
   selector: 'app-admin-layout',
@@ -23,13 +29,13 @@ import { PAGE_TITLES } from '../../core/constants/page-titles';
   imports: [CommonModule, RouterModule, MatIconModule],
 })
 export class AdminLayoutComponent implements OnInit, OnDestroy {
-
   private router = inject(Router);
   private layout = inject(LayoutService);
   private authService = inject(AuthService);
   private userService = inject(UserService);
-
   private routerSub!: Subscription;
+
+  menuGroups: MenuGroup[] = [];
 
   /* UI STATE (FROM SERVICE) */
   get sidebarOpen() {
@@ -57,31 +63,35 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
     return this.userService.getInitials();
   }
 
+  get userRole() {
+    const role = this.userService.getRole();
+    if (!role) return 'Unknown Role';
+    
+    // Convert 'ADMIN' to 'Admin', 'STUDENT' to 'Student'
+    return role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
+  }
+
   /* HEADER */
   currentPageTitle = 'Dashboard';
   notifCount = 3;
   pendingCount = 12;
 
   ngOnInit(): void {
-
     this.layout.sidebarOpen = window.innerWidth >= 1024;
 
     this.routerSub = this.router.events
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
-      .subscribe(e => {
-
+      .subscribe((e) => {
         const url = e.urlAfterRedirects;
 
-        const match = Object.keys(PAGE_TITLES).find(k =>
-          url.startsWith(k)
-        );
+        const match = Object.keys(PAGE_TITLES).find((k) => url.startsWith(k));
 
-        this.currentPageTitle = match
-          ? PAGE_TITLES[match]
-          : 'BrightClass';
+        this.currentPageTitle = match ? PAGE_TITLES[match] : 'BrightClass';
 
         this.layout.mobileMenuOpen = false;
       });
+
+      this.buildMenu();
   }
 
   ngOnDestroy(): void {
@@ -134,5 +144,29 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
   logout() {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+
+  private buildMenu() {
+    const role = this.userService.getRole(); // logged in user's role
+    
+    // role related filtering of menu items
+    const filtered = MENU_ITEMS.filter(item => item.roles.includes(role));
+
+    // make a map of section -> items
+    const groupsMap = new Map<string, MenuItem[]>();
+
+    filtered.forEach(item => {
+      if (!groupsMap.has(item.section)) {
+        groupsMap.set(item.section, []);
+      }
+      groupsMap.get(item.section)!.push(item);
+    });
+
+    // convert to array of { section, items }
+    this.menuGroups = Array.from(groupsMap.entries()).map(([section, items]) => ({
+      section,
+      items
+    }));
   }
 }

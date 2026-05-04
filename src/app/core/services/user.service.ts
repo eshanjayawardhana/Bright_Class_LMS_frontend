@@ -4,6 +4,9 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class UserService {
+  getRole() {
+    return localStorage.getItem('userRole') || '';
+  }
 
   getEmail(): string {
     return localStorage.getItem('userEmail') || '';

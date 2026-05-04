@@ -1,43 +1,69 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './features/auth/pages/login/login.component';
-import { RegisterComponent } from './features/auth/pages/register/register.component';
 import { authGuard } from './core/guards/auth.guard';
-import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { roleGuard } from './core/guards/role.guard';
+import { ROLES } from './core/constants/roles';
 
 export const routes: Routes = [
   {
-    path: '',
-    component: AdminLayoutComponent,
-    canActivate: [authGuard],
+    path: 'login',
+    loadComponent: () =>
+      import('./features/auth/pages/login/login.component').then(m => m.LoginComponent)
+  },
+
+  // Admin Routes
+  {
+    path: 'admin',
+    canActivate: [authGuard, roleGuard([ROLES.ADMIN])],
+    loadComponent: () =>
+      import('./layouts/admin-layout/admin-layout.component').then(m => m.AdminLayoutComponent),
     children: [
       {
         path: 'dashboard',
-        canActivate: [roleGuard(['ADMIN'])],
         loadComponent: () =>
-          import('./features/dashboard/pages/admin-dashboard/admin-dashboard.component').then(
-            (m) => m.AdminDashboardComponent,
-          ),
-      },
-    ],
+          import('./features/dashboard/pages/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent)
+      }
+      // Future admin routes will go here
+    ]
   },
+
+  // Student Routes
   {
-    path: 'login',
+    path: 'student',
+    canActivate: [authGuard, roleGuard([ROLES.STUDENT])],
     loadComponent: () =>
-      import('./features/auth/pages/login/login.component').then(
-        (m) => m.LoginComponent,
-      ),
+      import('./layouts/admin-layout/admin-layout.component').then(m => m.AdminLayoutComponent),
+    children: [
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./features/dashboard/pages/student-dashboard/student-dashboard.component').then(m => m.StudentDashboardComponent)
+      }
+    ]
   },
+
+  // Lecturer Routes
+  {
+    path: 'lecturer',
+    canActivate: [authGuard, roleGuard([ROLES.LECTURER])],
+    loadComponent: () =>
+      import('./layouts/admin-layout/admin-layout.component').then(m => m.AdminLayoutComponent),
+    children: [
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./features/dashboard/pages/lecturer-dashboard/lecturer-dashboard.component').then(m => m.LecturerDashboardComponent)
+      }
+    ]
+  },
+
+  // Fallback Route
   {
     path: '',
-    redirectTo: 'dashboard',
-    pathMatch: 'full',
+    redirectTo: 'login',
+    pathMatch: 'full'
   },
   {
-    path: 'register',
-    loadComponent: () =>
-      import('./features/auth/pages/register/register.component').then(
-        (m) => m.RegisterComponent,
-      ),
-  },
+    path: '**',
+    redirectTo: 'login'
+  }
 ];

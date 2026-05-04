@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../../../core/services/auth.service';
+import { ROLES } from '../../../../core/constants/roles';
 
 @Component({
   selector: 'app-login',
@@ -56,16 +57,25 @@ export class LoginComponent {
 
     this.authService.login(this.loginForm.getRawValue()).subscribe({
       next: (res) => {
-        console.log('LOGIN SUCCESS', res);
         this.isLoading = false;
-        this.router.navigate(['/dashboard']).then((success) => {
-          console.log('NAVIGATION RESULT:', success);
-        });
+        
+        const role = res.data.role;
+
+        // Route based on role
+        if (role === ROLES.ADMIN) {
+          this.router.navigate(['/admin/dashboard']);
+        } else if (role === ROLES.STUDENT) {
+          this.router.navigate(['/student/dashboard']);
+        } else if (role === ROLES.LECTURER) {
+          this.router.navigate(['/lecturer/dashboard']);
+        } else {
+          this.router.navigate(['/login']);
+        }
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMessage = err.error?.message || 'Wrong email or password!';
-      },
+        this.errorMessage = err.error?.message || 'Login failed!';
+      }
     });
   }
 }

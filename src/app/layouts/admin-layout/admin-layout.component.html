@@ -17,59 +17,34 @@
 
     <!-- Nav sections -->
     <div class="sb-scroll">
-      <div class="sb-section">
-        <span class="sb-section-label">Main</span>
+      
+      <!-- menuGroups array -->
+      @for (group of menuGroups; track group.section) {
+        <div class="sb-section">
+          
+          <span class="sb-section-label">{{ group.section }}</span>
 
-        <a class="nav-item" routerLink="/admin/dashboard" routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }" (click)="onNavClick()">
-          <mat-icon>dashboard</mat-icon>
-          <span class="nav-label">Dashboard</span>
-          <span class="nav-tooltip">Dashboard</span>
-        </a>
-
-        <a class="nav-item" routerLink="/admin/courses" routerLinkActive="active" (click)="onNavClick()">
-          <mat-icon>auto_stories</mat-icon>
-          <span class="nav-label">Courses</span>
-          <span class="nav-tooltip">Courses</span>
-        </a>
-
-        <a class="nav-item" routerLink="/admin/enrollment" routerLinkActive="active" (click)="onNavClick()">
-          <mat-icon>people</mat-icon>
-          <span class="nav-label">Enrollments</span>
-          @if (pendingCount > 0) {
-          <span class="nav-badge">{{ pendingCount }}</span>
+          @for (item of group.items; track item.route) {
+            <a class="nav-item" 
+               [routerLink]="item.route" 
+               routerLinkActive="active"
+               [routerLinkActiveOptions]="item.route === '/admin/dashboard' ? { exact: true } : { exact: false }"
+               (click)="onNavClick()">
+              
+              <mat-icon>{{ item.icon }}</mat-icon>
+              <span class="nav-label">{{ item.label }}</span>
+              
+              @if (item.badge === 'pending' && pendingCount > 0) {
+                <span class="nav-badge">{{ pendingCount }}</span>
+              }
+              
+              <span class="nav-tooltip">{{ item.label }}</span>
+            </a>
           }
-          <span class="nav-tooltip">Enrollments</span>
-        </a>
 
-        <a class="nav-item" routerLink="/admin/payments" routerLinkActive="active" (click)="onNavClick()">
-          <mat-icon>payments</mat-icon>
-          <span class="nav-label">Payments</span>
-          <span class="nav-tooltip">Payments</span>
-        </a>
-      </div>
+        </div>
+      }
 
-      <div class="sb-section">
-        <span class="sb-section-label">Manage</span>
-
-        <a class="nav-item" routerLink="/admin/students" routerLinkActive="active" (click)="onNavClick()">
-          <mat-icon>school</mat-icon>
-          <span class="nav-label">Students</span>
-          <span class="nav-tooltip">Students</span>
-        </a>
-
-        <a class="nav-item" routerLink="/admin/reports" routerLinkActive="active" (click)="onNavClick()">
-          <mat-icon>bar_chart</mat-icon>
-          <span class="nav-label">Reports</span>
-          <span class="nav-tooltip">Reports</span>
-        </a>
-
-        <a class="nav-item" routerLink="/admin/settings" routerLinkActive="active" (click)="onNavClick()">
-          <mat-icon>settings</mat-icon>
-          <span class="nav-label">Settings</span>
-          <span class="nav-tooltip">Settings</span>
-        </a>
-      </div>
     </div>
 
     <!-- User profile at bottom -->
@@ -78,7 +53,7 @@
         <div class="sb-avatar">{{ userInitials }}</div>
         <div class="sb-user-info">
           <div class="sb-user-name">{{ userName }}</div>
-          <div class="sb-user-role">Administrator</div>
+          <div class="sb-user-role">{{ userRole }}</div>
         </div>
         <mat-icon class="sb-logout-icon">logout</mat-icon>
         <span class="nav-tooltip">Logout</span>
