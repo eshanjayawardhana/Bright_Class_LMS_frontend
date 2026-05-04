@@ -1,0 +1,32 @@
+/* Skeleton Loader Animations */
+.skeleton-card {
+  gap: 16px;
+}
+
+.skeleton-icon, .skeleton-text-sm, .skeleton-text-lg {
+  background: #e2e8f0;
+  border-radius: 8px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.skeleton-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+}
+
+.skeleton-text-sm {
+  width: 50%;
+  height: 14px;
+}
+
+.skeleton-text-lg {
+  width: 80%;
+  height: 32px;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 0.3; }
+  100% { opacity: 0.6; }
+}

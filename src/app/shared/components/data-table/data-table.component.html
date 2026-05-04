@@ -1,0 +1,50 @@
+<div class="table-responsive">
+  <table class="data-table">
+    <thead>
+      <tr>
+        @for (col of columns; track col.key) {
+          <th>{{ col.label }}</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of data; track row.id || $index) {
+        <tr>
+          @for (col of columns; track col.key) {
+            <td>
+              
+              <!-- USER TYPE (Avatar + Name) -->
+              @if (col.type === 'user') {
+                <div class="student-info">
+                  <div class="avatar-sm">{{ row[col.key].charAt(0) }}</div>
+                  <span class="fw-medium">{{ row[col.key] }}</span>
+                </div>
+              }
+
+              <!-- BADGE TYPE -->
+              @if (col.type === 'badge') {
+                <span class="status-badge" [ngClass]="{
+                  'status-pending': row[col.key] === 'PENDING',
+                  'status-approved': row[col.key] === 'APPROVED',
+                  'status-rejected': row[col.key] === 'REJECTED'
+                }">
+                  {{ row[col.key] }}
+                </span>
+              }
+
+              <!-- TEXT TYPE -->
+              @if (col.type === 'text') {
+                <span class="text-muted">{{ row[col.key] }}</span>
+              }
+
+            </td>
+          }
+        </tr>
+      } @empty {
+        <tr>
+          <td [attr.colspan]="columns.length" class="py-4 text-center text-muted">No data available</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

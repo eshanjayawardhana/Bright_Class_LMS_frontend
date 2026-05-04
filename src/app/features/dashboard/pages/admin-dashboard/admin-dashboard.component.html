@@ -1,1 +1,50 @@
-<p>admin-dashboard works!</p>
+<div class="dashboard-wrapper">
+  
+  <div class="dashboard-header">
+    <h1 class="page-title">Overview</h1>
+    <p class="page-subtitle">Here is a summary of your platform's current status.</p>
+  </div>
+
+  <div class="kpi-grid">
+    @if (loading) {
+      @for (i of [1, 2, 3, 4, 5]; track i) {
+        <app-kpi-skeleton></app-kpi-skeleton>
+      }
+    } @else if (stats) {
+      <app-kpi-card label="Total Users" [value]="stats.totalUsers" icon="group" theme="blue"></app-kpi-card>
+      <app-kpi-card label="Total Courses" [value]="stats.totalCourses" icon="auto_stories" theme="purple"></app-kpi-card>
+      <app-kpi-card label="Total Enrollments" [value]="stats.totalEnrollments" icon="how_to_reg" theme="teal"></app-kpi-card>
+      <app-kpi-card label="Pending Approvals" [value]="stats.pendingEnrollments" icon="pending_actions" theme="orange" borderTheme="warning"></app-kpi-card>
+      <app-kpi-card label="Total Revenue (LKR)" [value]="stats.totalPayments" icon="payments" theme="green" borderTheme="success" [isCurrency]="true"></app-kpi-card>
+    }
+  </div>
+
+  <div class="analytics-row">
+    <!-- Chart -->
+    <div class="chart-card">
+      <div class="card-header">
+        <h3 class="card-title">Enrollment Trends</h3>
+        <button class="icon-btn" aria-label="More options"><mat-icon>more_vert</mat-icon></button>
+      </div>
+      <div class="chart-container">
+        <canvas #enrollmentChart></canvas>
+      </div>
+    </div>
+
+    <!-- Smart Table Component -->
+    <div class="table-card">
+      <div class="card-header">
+        <h3 class="card-title">Recent Activity</h3>
+        <a href="#" class="view-all">View All</a>
+      </div>
+      
+      @if (!loading && stats) {
+        <app-data-table 
+          [columns]="tableColumns" 
+          [data]="stats.recentActivity">
+        </app-data-table>
+      }
+    </div>
+  </div>
+
+</div>

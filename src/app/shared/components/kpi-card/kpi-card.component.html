@@ -1,0 +1,16 @@
+<div class="kpi-card" [ngClass]="borderTheme !== 'none' ? 'border-' + borderTheme : ''">
+  <div class="kpi-header">
+    <div class="kpi-icon-wrapper" [ngClass]="theme">
+      <mat-icon>{{ icon }}</mat-icon>
+    </div>
+  </div>
+  <div class="kpi-body">
+    <h3 class="kpi-label">{{ label }}</h3>
+    <p class="kpi-value">
+      @if (isCurrency) {
+        Rs. 
+      }
+      {{ value | number }}
+    </p>
+  </div>
+</div>
