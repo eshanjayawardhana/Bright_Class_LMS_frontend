@@ -1,0 +1,28 @@
+<div class="modal-backdrop" (click)="cancel.emit()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+
+        <div class="modal-icon warning">
+            <mat-icon>warning</mat-icon>
+        </div>
+
+        <h2 class="modal-title">Delete Course</h2>
+
+        <p class="modal-desc">
+            Are you sure you want to delete <strong>"{{ courseTitle }}"</strong>?
+            This action cannot be undone and all related data will be permanently removed.
+        </p>
+
+        <div class="modal-actions">
+            <button class="btn btn-outline" (click)="cancel.emit()" [disabled]="isDeleting">Cancel</button>
+            <button class="btn btn-danger" (click)="confirmDelete.emit()" [disabled]="isDeleting">
+                @if (isDeleting) {
+                <mat-icon class="spinner">autorenew</mat-icon>
+                Deleting...
+                } @else {
+                Delete Course
+                }
+            </button>
+        </div>
+
+    </div>
+</div>

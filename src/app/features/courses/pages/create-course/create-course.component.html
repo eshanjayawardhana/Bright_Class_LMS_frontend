@@ -1,0 +1,13 @@
+<div class="page-wrapper">
+
+    <div class="page-header">
+        <h1 class="page-title">Create New Course</h1>
+        <p class="page-subtitle">Fill in the details below to add a new course to the system.</p>
+    </div>
+
+    <div class="form-container">
+        <app-course-form [isLoading]="isSaving" (formSubmit)="handleCreate($event)">
+        </app-course-form>
+    </div>
+
+</div>

@@ -1,0 +1,33 @@
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 900px;
+}
+
+.page-header {
+    .page-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--text);
+        margin: 0 0 4px 0;
+    }
+
+    .page-subtitle {
+        font-size: 14px;
+        color: var(--text-muted);
+        margin: 0;
+    }
+}  
+
+.form-container {
+    background: var(--card);
+    padding: 32px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+
+    @media (max-width: 640px) {
+        padding: 20px;
+    }
+}

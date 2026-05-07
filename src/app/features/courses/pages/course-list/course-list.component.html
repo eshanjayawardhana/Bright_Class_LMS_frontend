@@ -1,0 +1,105 @@
+<div class="page-wrapper">
+
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">Course Management</h1>
+            <p class="page-subtitle">Manage, update, and track all your platform courses here.</p>
+        </div>
+        <button class="btn btn-primary" (click)="createCourse()">
+            <mat-icon>add</mat-icon>
+            <span>Create Course</span>
+        </button>
+    </div>
+
+    <div class="toolbar">
+        <div class="search-box">
+            <mat-icon class="search-icon">search</mat-icon>
+            <input type="text" placeholder="Search courses by name or code..." [(ngModel)]="searchTerm"
+                (ngModelChange)="onSearchChange($event)" />
+        </div>
+    </div>
+
+    @if (loading) {
+    <div class="loading-state">
+        <mat-icon class="spinner">autorenew</mat-icon>
+        <p>Loading courses...</p>
+    </div>
+    }
+
+    @if (!loading && courses.length === 0) {
+    <div class="empty-state">
+        <div class="empty-icon-wrapper">
+            <mat-icon>auto_stories</mat-icon>
+        </div>
+        <h3>No courses found</h3>
+        <p>Get started by creating your first course.</p>
+        <button class="mt-3 btn btn-primary" (click)="createCourse()">Create Course</button>
+    </div>
+    }
+
+    @if (!loading && courses.length > 0) {
+    <div class="table-card">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Course Name</th>
+                        <th>Category</th>
+                        <th>Term</th>
+                        <th>Created Date</th>
+                        <th class="text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (course of courses; track course.id) {
+                    <tr>
+                        <td>
+                            <div class="course-info">
+                                <span class="course-title">{{ course.title }}</span>
+                                <span class="course-code">{{ course.code }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge badge-blue">{{ course.category }}</span>
+                        </td>
+                        <td>
+                            <div class="term-info">
+                                <span class="year">Year {{ course.year }}</span>
+                                <span class="semester">Seme {{ course.semester }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="date-text">{{ course.createdAt | date:'mediumDate' }}</span>
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <button class="action-btn view-btn" aria-label="View" (click)="viewCourse(course.id)">
+                                    <mat-icon>visibility</mat-icon>
+                                </button>
+                                <button class="action-btn edit-btn" aria-label="Edit" (click)="editCourse(course.id)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button class="action-btn delete-btn" aria-label="Delete"
+                                    (click)="openDeleteDialog(course)">
+                                    <mat-icon>delete_outline</mat-icon>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    }
+
+    @if (showDeleteDialog && selectedCourseForDelete) {
+    <app-delete-course-dialog
+      [courseTitle]="selectedCourseForDelete.title"
+      [isDeleting]="isDeleting"
+      (confirmDelete)="confirmDelete()"
+      (cancel)="closeDeleteDialog()">
+    </app-delete-course-dialog>
+  }
+
+</div>

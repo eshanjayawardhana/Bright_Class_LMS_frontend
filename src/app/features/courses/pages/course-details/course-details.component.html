@@ -1,0 +1,74 @@
+<div class="page-wrapper">
+
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">Course Details</h1>
+            <p class="page-subtitle">Complete overview of the course information.</p>
+        </div>
+
+        <div class="header-actions">
+            <button class="btn btn-outline" (click)="goBack()">
+                <mat-icon>arrow_back</mat-icon>
+                <span>Back</span>
+            </button>
+
+            @if (course) {
+            <button class="btn btn-primary" (click)="editCourse()">
+                <mat-icon>edit</mat-icon>
+                <span>Edit Course</span>
+            </button>
+            }
+        </div>
+    </div>
+
+    @if (isLoading) {
+    <div class="loading-state">
+        <mat-icon class="spinner">autorenew</mat-icon>
+        <p>Loading course details...</p>
+    </div>
+    }
+
+    @if (!isLoading && course) {
+    <div class="details-card">
+        <div class="details-grid">
+
+            <div class="detail-item">
+                <label>Course Title</label>
+                <span class="value fw-bold">{{ course.title }}</span>
+            </div>
+
+            <div class="detail-item">
+                <label>Course Code</label>
+                <span class="value">{{ course.code }}</span>
+            </div>
+
+            <div class="detail-item">
+                <label>Category</label>
+                <span class="badge">{{ course.category }}</span>
+            </div>
+
+            <div class="detail-item">
+                <label>Academic Term</label>
+                <span class="value">Year {{ course.year }}, Semester {{ course.semester }}</span>
+            </div>
+
+            <div class="detail-item">
+                <label>Lecturer Email</label>
+                <span class="value">{{ course.lecturerEmail || 'N/A' }}</span>
+            </div>
+
+            <div class="detail-item">
+                <label>Created Date</label>
+                <span class="value">{{ course.createdAt | date:'medium' }}</span>
+            </div>
+
+            <div class="detail-item full-width">
+                <label>Description</label>
+                <p class="desc-text">{{ course.description }}</p>
+            </div>
+
+        </div>
+    </div>
+    }
+
+</div>

@@ -1,0 +1,22 @@
+<div class="page-wrapper">
+
+    <div class="page-header">
+        <h1 class="page-title">Edit Course</h1>
+        <p class="page-subtitle">Update the course information below.</p>
+    </div>
+
+    @if (isFetching) {
+    <div class="loading-state">
+        <mat-icon class="spinner">autorenew</mat-icon>
+        <p>Loading course data...</p>
+    </div>
+    }
+
+    @if (!isFetching && courseData) {
+    <div class="form-container">
+        <app-course-form [initialData]="courseData" [isLoading]="isSaving" (formSubmit)="handleUpdate($event)">
+        </app-course-form>
+    </div>
+    }
+
+</div>
