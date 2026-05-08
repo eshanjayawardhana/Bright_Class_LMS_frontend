@@ -1,0 +1,13 @@
+.status-chip {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-block;
+
+  &.pending { background: #fffbeb; color: #d97706; }
+  &.verified { background: #ecfdf5; color: #059669; }
+  &.rejected { background: #fef2f2; color: #dc2626; }
+}

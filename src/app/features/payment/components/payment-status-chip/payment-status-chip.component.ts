@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-payment-status-chip',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './payment-status-chip.component.html',
-  styleUrl: './payment-status-chip.component.scss'
+  styleUrls: ['./payment-status-chip.component.scss']
 })
 export class PaymentStatusChipComponent {
-
+  @Input({ required: true }) status!: string;
 }

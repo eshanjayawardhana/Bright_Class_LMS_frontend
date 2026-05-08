@@ -14,6 +14,7 @@ import { EnrollmentStatusChipComponent } from '../../components/enrollment-statu
 
 import { ApproveDialogComponent } from '../../components/approve-dialog/approve-dialog.component';
 import { RejectDialogComponent } from '../../components/reject-dialog/reject-dialog.component';
+import { CountService } from '../../../../core/services/count.service';
 
 @Component({
   selector: 'app-enrollment-list',
@@ -34,6 +35,7 @@ export class EnrollmentListComponent implements OnInit, OnDestroy {
   private enrollmentService = inject(EnrollmentService);
   private toastService = inject(ToastService);
   private router = inject(Router);
+  private countService = inject(CountService);
 
   enrollments: Enrollment[] = [];
   loading = true;
@@ -132,6 +134,7 @@ export class EnrollmentListComponent implements OnInit, OnDestroy {
           this.toastService.success('Enrollment successfully approved!');
           this.closeDialogs();
           this.loadEnrollments();
+          this.countService.refreshCounts();
         },
         error: () => {
           this.isProcessingAction = false;
@@ -152,6 +155,7 @@ export class EnrollmentListComponent implements OnInit, OnDestroy {
           this.toastService.warning('Enrollment has been rejected.');
           this.closeDialogs();
           this.loadEnrollments();
+          this.countService.refreshCounts();
         },
         error: () => {
           this.isProcessingAction = false;

@@ -1,1 +1,37 @@
-<p>reject-payment-dialog works!</p>
+<div class="modal-backdrop" (click)="cancel.emit()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    
+    <div class="modal-icon danger">
+      <mat-icon>money_off</mat-icon>
+    </div>
+
+    <h2 class="modal-title">Reject Payment Slip</h2>
+    
+    <p class="modal-desc">
+      You are rejecting the payment slip uploaded by <strong>"{{ studentName }}"</strong>. 
+      This will also reject their course enrollment.
+    </p>
+
+    <div class="input-wrapper">
+      <textarea 
+        [(ngModel)]="reason" 
+        rows="3" 
+        placeholder="e.g. Blur image, Invalid reference, Incorrect amount..."
+        [disabled]="isProcessing">
+      </textarea>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-outline" (click)="cancel.emit()" [disabled]="isProcessing">Cancel</button>
+      <button class="btn btn-danger" (click)="onSubmit()" [disabled]="isProcessing || !reason.trim()">
+        @if (isProcessing) {
+          <mat-icon class="spinner">autorenew</mat-icon>
+          Rejecting...
+        } @else {
+          Reject Payment
+        }
+      </button>
+    </div>
+
+  </div>
+</div>

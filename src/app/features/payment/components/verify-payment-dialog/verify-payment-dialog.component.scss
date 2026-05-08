@@ -1,0 +1,77 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal-card {
+  background: var(--card, #fff);
+  padding: 32px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 440px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+
+  &.success {
+    background: #ecfdf5;
+    color: #059669;
+  }
+
+  mat-icon { font-size: 28px; width: 28px; height: 28px; }
+}
+
+.modal-title { font-size: 20px; font-weight: 700; color: var(--text, #0f172a); margin: 0 0 12px 0; }
+.modal-desc { font-size: 14px; color: var(--text-muted, #64748b); line-height: 1.6; margin: 0 0 20px 0; }
+
+.summary-box {
+  background: #f8fafc;
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px dashed #cbd5e1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+
+  .summary-label { font-size: 13px; color: var(--text-muted, #64748b); font-weight: 600; text-transform: uppercase; }
+  .summary-value { font-size: 18px; color: #0f172a; font-family: monospace; }
+}
+
+.modal-actions {
+  display: flex; width: 100%; gap: 12px;
+  .btn {
+    flex: 1; display: flex; justify-content: center; align-items: center; gap: 8px;
+    padding: 12px; border-radius: 10px; font-weight: 600; font-size: 14px; cursor: pointer; border: none; transition: all 0.2s;
+    mat-icon { font-size: 18px; width: 18px; height: 18px; }
+    &.btn-outline { background: transparent; border: 1px solid var(--border, #e2e8f0); color: var(--text, #0f172a); &:hover:not(:disabled) { background: #f8fafc; } }
+    &.btn-success { background: #059669; color: #fff; &:hover:not(:disabled) { background: #047857; } }
+    &:disabled { opacity: 0.6; cursor: not-allowed; }
+  }
+}
+
+.spinner { animation: spin 1s linear infinite; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes spin { 100% { transform: rotate(360deg); } }

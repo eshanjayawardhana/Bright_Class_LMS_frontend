@@ -16,6 +16,10 @@ import { UserService } from '../../core/services/user.service';
 import { PAGE_TITLES } from '../../core/constants/page-titles';
 import { MENU_ITEMS, MenuItem } from '../../core/constants/menu.config';
 
+import { EnrollmentService } from '../../features/enrollment/services/enrollment.service';
+import { PaymentService } from '../../features/payment/services/payment.service';
+import { CountService } from '../../core/services/count.service';
+
 interface MenuGroup {
   section: string;
   items: MenuItem[];
@@ -33,7 +37,12 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
   private layout = inject(LayoutService);
   private authService = inject(AuthService);
   private userService = inject(UserService);
+
+  private enrollmentService = inject(EnrollmentService);
+  private paymentService = inject(PaymentService);
+
   private routerSub!: Subscription;
+  private countService = inject(CountService);
 
   menuGroups: MenuGroup[] = [];
 
@@ -66,7 +75,7 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
   get userRole() {
     const role = this.userService.getRole();
     if (!role) return 'Unknown Role';
-    
+
     // Convert 'ADMIN' to 'Admin', 'STUDENT' to 'Student'
     return role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
   }
@@ -74,7 +83,10 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
   /* HEADER */
   currentPageTitle = 'Dashboard';
   notifCount = 3;
-  pendingCount = 12;
+
+  pendingEnrollmentsCount = 0;
+  pendingPaymentsCount = 0;
+  private countSub!: Subscription;
 
   ngOnInit(): void {
     this.layout.sidebarOpen = window.innerWidth >= 1024;
@@ -91,11 +103,22 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
         this.layout.mobileMenuOpen = false;
       });
 
-      this.buildMenu();
+    this.buildMenu();
+
+    this.countSub = this.countService.enrollmentCount$.subscribe(
+      (count) => (this.pendingEnrollmentsCount = count),
+    );
+
+    this.countSub.add(
+      this.countService.paymentCount$.subscribe(
+        (count) => (this.pendingPaymentsCount = count),
+      ),
+    );
   }
 
   ngOnDestroy(): void {
     this.routerSub?.unsubscribe();
+    this.countSub?.unsubscribe();
   }
 
   /* SIDEBAR ACTIONS */
@@ -146,17 +169,16 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
     this.router.navigate(['/login']);
   }
 
-
   private buildMenu() {
     const role = this.userService.getRole(); // logged in user's role
-    
+
     // role related filtering of menu items
-    const filtered = MENU_ITEMS.filter(item => item.roles.includes(role));
+    const filtered = MENU_ITEMS.filter((item) => item.roles.includes(role));
 
     // make a map of section -> items
     const groupsMap = new Map<string, MenuItem[]>();
 
-    filtered.forEach(item => {
+    filtered.forEach((item) => {
       if (!groupsMap.has(item.section)) {
         groupsMap.set(item.section, []);
       }
@@ -164,9 +186,17 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
     });
 
     // convert to array of { section, items }
-    this.menuGroups = Array.from(groupsMap.entries()).map(([section, items]) => ({
-      section,
-      items
-    }));
+    this.menuGroups = Array.from(groupsMap.entries()).map(
+      ([section, items]) => ({
+        section,
+        items,
+      }),
+    );
+  }
+
+  getBadgeCount(label: string): number {
+    if (label === 'Enrollments') return this.pendingEnrollmentsCount;
+    if (label === 'Payments') return this.pendingPaymentsCount;
+    return 0;
   }
 }

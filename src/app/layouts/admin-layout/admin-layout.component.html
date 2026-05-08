@@ -34,8 +34,8 @@
               <mat-icon>{{ item.icon }}</mat-icon>
               <span class="nav-label">{{ item.label }}</span>
               
-              @if (item.badge === 'pending' && pendingCount > 0) {
-                <span class="nav-badge">{{ pendingCount }}</span>
+              @if (getBadgeCount(item.label) > 0) {
+                <span class="nav-badge">{{ getBadgeCount(item.label) }}</span>
               }
               
               <span class="nav-tooltip">{{ item.label }}</span>

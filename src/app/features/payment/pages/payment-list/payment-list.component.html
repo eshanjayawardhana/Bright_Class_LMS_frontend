@@ -1,1 +1,147 @@
-<p>payment-list works!</p>
+<div class="page-wrapper">
+
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">Financial Verification</h1>
+      <p class="page-subtitle">Review, verify, and manage student payment slips.</p>
+    </div>
+
+    <div class="stat-box">
+      <span class="stat-label">Pending Verifications</span>
+      <span class="stat-value" [class.has-pending]="pendingCount > 0">{{ pendingCount }}</span>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="search-box">
+      <mat-icon class="search-icon">search</mat-icon>
+      <input 
+        type="text" 
+        placeholder="Search by student, email, or course..." 
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchChange()"
+      />
+    </div>
+
+    <div class="filter-box">
+      <mat-icon class="filter-icon">filter_list</mat-icon>
+      <select [(ngModel)]="selectedStatus" (ngModelChange)="onStatusChange()">
+        <option value="">All Statuses</option>
+        <option value="PENDING">Pending</option>
+        <option value="VERIFIED">Verified</option>
+        <option value="REJECTED">Rejected</option>
+      </select>
+    </div>
+  </div>
+
+  @if (loading) {
+    <div class="loading-state">
+      <mat-icon class="spinner">autorenew</mat-icon>
+      <p>Loading payment records...</p>
+    </div>
+  }
+
+  @if (!loading && payments.length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon-wrapper">
+        <mat-icon>receipt_long</mat-icon>
+      </div>
+      <h3>No payments found</h3>
+      <p>There are no payment records matching your current criteria.</p>
+    </div>
+  }
+
+  @if (!loading && payments.length > 0) {
+    <div class="table-card">
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Student Details</th>
+              <th>Course Applied</th>
+              <th>Amount</th>
+              <th>Slip Document</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th class="text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (payment of payments; track payment.id) {
+              <tr>
+                <td>
+                  <div class="student-info">
+                    <span class="student-name">{{ payment.studentName }}</span>
+                    <span class="student-email">{{ payment.studentEmail }}</span>
+                  </div>
+                </td>
+                <td>
+                  <span class="course-text">{{ payment.courseTitle }}</span>
+                </td>
+                <td>
+                  <span class="amount-text">Rs. {{ payment.amount | number:'1.2-2' }}</span>
+                </td>
+                <td>
+                  <div class="slip-container" (click)="openImage(payment.slipUrl)">
+                    <img [src]="resolveImageUrl(payment.slipUrl)" alt="Slip Thumbnail" class="slip-thumb" />
+                    <div class="slip-overlay"><mat-icon>zoom_in</mat-icon></div>
+                  </div>
+                </td>
+                <td>
+                  <app-payment-status-chip [status]="payment.status"></app-payment-status-chip>
+                </td>
+                <td>
+                  <span class="date-text">{{ payment.paymentDate | date:'MMM d, y' }}</span>
+                </td>
+                <td>
+                  <div class="actions">
+                    <button class="action-btn view-btn" aria-label="View Details" (click)="viewPayment(payment.id)" title="View Details">
+                      <mat-icon>visibility</mat-icon>
+                    </button>
+                    
+                    @if (payment.status === 'PENDING') {
+                      <button class="action-btn verify-btn" aria-label="Verify" (click)="openVerifyDialog(payment)" title="Verify Payment">
+                        <mat-icon>verified</mat-icon>
+                      </button>
+                      <button class="action-btn reject-btn" aria-label="Reject" (click)="openRejectDialog(payment)" title="Reject Payment">
+                        <mat-icon>cancel</mat-icon>
+                      </button>
+                    }
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+
+  @if (showImageViewer) {
+    <app-image-viewer-modal 
+      [imageUrl]="selectedImage" 
+      (closeDialog)="closeImageViewer()">
+    </app-image-viewer-modal>
+  }
+
+  @if (showVerifyDialog && selectedPaymentForAction) {
+    <app-verify-payment-dialog
+      [studentName]="selectedPaymentForAction.studentName"
+      [courseTitle]="selectedPaymentForAction.courseTitle"
+      [amount]="selectedPaymentForAction.amount"
+      [isProcessing]="isProcessingAction"
+      (confirm)="confirmVerify()"
+      (cancel)="closeDialogs()">
+    </app-verify-payment-dialog>
+  }
+
+  @if (showRejectDialog && selectedPaymentForAction) {
+    <app-reject-payment-dialog
+      [studentName]="selectedPaymentForAction.studentName"
+      [isProcessing]="isProcessingAction"
+      (confirm)="confirmReject($event)"
+      (cancel)="closeDialogs()">
+    </app-reject-payment-dialog>
+  }
+
+</div>

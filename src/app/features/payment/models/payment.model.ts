@@ -1,13 +1,17 @@
 import { PaymentStatus } from './payment-status.type';
 
 export interface Payment {
+
   id: number;
   enrollmentId: number;
+
   studentName: string;
   studentEmail: string;
   courseTitle: string;
+
   amount: number;
-  paymentSlipUrl: string;
+  paymentMethod: string;
   status: PaymentStatus;
-  uploadedAt: string;
+  paymentDate: string;
+  slipUrl: string;
 }

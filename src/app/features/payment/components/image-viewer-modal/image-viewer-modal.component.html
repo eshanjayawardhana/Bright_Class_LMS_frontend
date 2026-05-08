@@ -1,1 +1,16 @@
-<p>image-viewer-modal works!</p>
+<div class="modal-backdrop" (click)="closeDialog.emit()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    
+    <div class="modal-header">
+      <h3 class="modal-title">Payment Slip Preview</h3>
+      <button class="close-btn" (click)="closeDialog.emit()" aria-label="Close">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <img [src]="imageUrl" alt="Payment Slip Document" class="preview-img" />
+    </div>
+
+  </div>
+</div>
