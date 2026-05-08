@@ -35,6 +35,13 @@ export const routes: Routes = [
             (m) => m.COURSE_ROUTES,
           ),
       },
+      {
+        path: 'enrollment',
+        loadChildren: () =>
+          import('./features/enrollment/enrollment.routes').then(
+            (m) => m.ENROLLMENT_ROUTES,
+          ),
+      },
     ],
   },
 

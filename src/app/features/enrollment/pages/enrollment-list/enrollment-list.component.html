@@ -1,1 +1,123 @@
-<p>enrollment-list works!</p>
+<div class="page-wrapper">
+
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">Enrollment Management</h1>
+      <p class="page-subtitle">Review, approve, and manage student course enrollments.</p>
+    </div>
+
+    <div class="stat-box">
+      <span class="stat-label">Pending Approvals</span>
+      <span class="stat-value" [class.has-pending]="pendingCount > 0">{{ pendingCount }}</span>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="search-box">
+      <mat-icon class="search-icon">search</mat-icon>
+      <input type="text" placeholder="Search by student, email, or course..." [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchChange()" />
+    </div>
+
+    <div class="filter-box">
+      <mat-icon class="filter-icon">filter_list</mat-icon>
+      <select [(ngModel)]="selectedStatus" (ngModelChange)="onStatusChange()">
+        <option value="">All Statuses</option>
+        <option value="PENDING">Pending</option>
+        <option value="APPROVED">Approved</option>
+        <option value="REJECTED">Rejected</option>
+      </select>
+    </div>
+  </div>
+
+  @if (loading) {
+  <div class="loading-state">
+    <mat-icon class="spinner">autorenew</mat-icon>
+    <p>Loading enrollments...</p>
+  </div>
+  }
+
+  @if (!loading && enrollments.length === 0) {
+  <div class="empty-state">
+    <div class="empty-icon-wrapper">
+      <mat-icon>how_to_reg</mat-icon>
+    </div>
+    <h3>No enrollments found</h3>
+    <p>There are no enrollments matching your current criteria.</p>
+  </div>
+  }
+
+  @if (!loading && enrollments.length > 0) {
+  <div class="table-card">
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Student Details</th>
+            <th>Course Applied</th>
+            <th>Status</th>
+            <th>Requested Date</th>
+            <th class="text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (enrollment of enrollments; track enrollment.id) {
+          <tr>
+            <td>
+              <div class="student-info">
+                <span class="student-name">{{ enrollment.fullName }}</span>
+                <span class="student-email">{{ enrollment.email }}</span>
+              </div>
+            </td>
+            <td>
+              <div class="course-info">
+                <span class="course-title">{{ enrollment.courseTitle }}</span>
+                <span class="course-code">Course ID: {{ enrollment.courseId }}</span>
+              </div>
+            </td>
+            <td>
+              <app-enrollment-status-chip [status]="enrollment.status"></app-enrollment-status-chip>
+            </td>
+            <td>
+              <span class="date-text">{{ enrollment.enrollmentDate | date:'mediumDate' }}</span>
+            </td>
+            <td>
+              <div class="actions">
+                <button class="action-btn view-btn" aria-label="View" (click)="viewEnrollment(enrollment.id)"
+                  title="View Details">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+
+                @if (enrollment.status === 'PENDING') {
+                <button class="action-btn approve-btn" aria-label="Approve" (click)="openApproveDialog(enrollment)"
+                  title="Approve">
+                  <mat-icon>check_circle</mat-icon>
+                </button>
+                <button class="action-btn reject-btn" aria-label="Reject" (click)="openRejectDialog(enrollment)"
+                  title="Reject">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+                }
+              </div>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+  }
+
+  @if (showApproveDialog && selectedEnrollment) {
+  <app-approve-dialog [studentName]="selectedEnrollment.fullName" [courseTitle]="selectedEnrollment.courseTitle"
+    [isProcessing]="isProcessingAction" (confirm)="confirmApprove()" (cancel)="closeDialogs()">
+  </app-approve-dialog>
+  }
+
+  @if (showRejectDialog && selectedEnrollment) {
+  <app-reject-dialog [studentName]="selectedEnrollment.fullName" [isProcessing]="isProcessingAction"
+    (confirm)="confirmReject($event)" (cancel)="closeDialogs()">
+  </app-reject-dialog>
+  }
+
+</div>

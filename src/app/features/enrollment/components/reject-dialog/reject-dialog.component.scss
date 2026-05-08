@@ -1,0 +1,185 @@
+/* REUSING THE PREMIUM MODAL STYLES */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.modal-card {
+    background: var(--card, #fff);
+    padding: 32px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 440px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+
+    &.success {
+        background: #ecfdf5;
+        color: #059669;
+    }
+
+    mat-icon {
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+    }
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text, #0f172a);
+    margin: 0 0 12px 0;
+}
+
+.modal-desc {
+    font-size: 14px;
+    color: var(--text-muted, #64748b);
+    line-height: 1.6;
+    margin: 0 0 28px 0;
+}
+
+.modal-actions {
+    display: flex;
+    width: 100%;
+    gap: 12px;
+
+    .btn {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        padding: 12px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s;
+
+        mat-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+        }
+
+        &.btn-outline {
+            background: transparent;
+            border: 1px solid var(--border, #e2e8f0);
+            color: var(--text, #0f172a);
+
+            &:hover:not(:disabled) {
+                background: #f8fafc;
+            }
+        }
+
+        &.btn-success {
+            background: #059669;
+            color: #fff;
+
+            &:hover:not(:disabled) {
+                background: #047857;
+            }
+        }
+
+        &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    }
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* ADD THESE AT THE BOTTOM OF THE COPIED SCSS */
+.modal-icon.danger {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.btn.btn-danger {
+  background: #dc2626;
+  color: #fff;
+  &:hover:not(:disabled) { background: #b91c1c; }
+}
+
+.input-wrapper {
+  width: 100%;
+  margin-bottom: 24px;
+  
+  textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: var(--radius, 10px);
+    background: #f8fafc;
+    color: var(--text, #0f172a);
+    font-size: 14px;
+    font-family: inherit;
+    resize: none;
+    outline: none;
+    transition: border-color 0.2s;
+
+    &:focus {
+      border-color: #dc2626;
+      background: var(--card, #fff);
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  }
+}
