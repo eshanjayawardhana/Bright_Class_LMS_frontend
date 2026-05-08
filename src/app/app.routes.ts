@@ -42,6 +42,11 @@ export const routes: Routes = [
             (m) => m.ENROLLMENT_ROUTES,
           ),
       },
+      {
+        path: 'payments',
+        loadChildren: () =>
+          import('./features/payment/payment.routes').then(m => m.PAYMENT_ROUTES)
+      },
     ],
   },
 
