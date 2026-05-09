@@ -1,0 +1,118 @@
+<div class="page-wrapper">
+
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">User Management</h1>
+            <p class="page-subtitle">Manage system access, roles, and account statuses.</p>
+        </div>
+
+        <div class="header-actions">
+            <div class="stat-box">
+                <span class="stat-label">Total Users</span>
+                <span class="stat-value">{{ totalUsers }}</span>
+            </div>
+
+            <button class="btn btn-primary" (click)="createLecturer()">
+                <mat-icon>person_add</mat-icon>
+                <span>Add Lecturer</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="toolbar">
+        <div class="search-box">
+            <mat-icon class="search-icon">search</mat-icon>
+            <input type="text" placeholder="Search by name or email..." [(ngModel)]="searchTerm"
+                (ngModelChange)="onSearchChange()" />
+        </div>
+
+        <div class="filter-group">
+            <div class="filter-box">
+                <mat-icon class="filter-icon">admin_panel_settings</mat-icon>
+                <select [(ngModel)]="selectedRole" (ngModelChange)="onFilterChange()">
+                    <option value="">All Roles</option>
+                    <option value="ADMIN">Admin</option>
+                    <option value="LECTURER">Lecturer</option>
+                    <option value="STUDENT">Student</option>
+                </select>
+            </div>
+
+            <div class="filter-box">
+                <mat-icon class="filter-icon">toggle_on</mat-icon>
+                <select [(ngModel)]="selectedStatus" (ngModelChange)="onFilterChange()">
+                    <option value="">All Statuses</option>
+                    <option value="ACTIVE">Active</option>
+                    <option value="INACTIVE">Inactive</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    @if (loading) {
+    <div class="loading-state">
+        <mat-icon class="spinner">autorenew</mat-icon>
+        <p>Loading user accounts...</p>
+    </div>
+    }
+
+    @if (!loading && users.length === 0) {
+    <div class="empty-state">
+        <div class="empty-icon-wrapper">
+            <mat-icon>manage_accounts</mat-icon>
+        </div>
+        <h3>No users found</h3>
+        <p>There are no accounts matching your current criteria.</p>
+    </div>
+    }
+
+    @if (!loading && users.length > 0) {
+    <div class="table-card">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Account Details</th>
+                        <th>System Role</th>
+                        <th>Account Status</th>
+                        <th>Joined Date</th>
+                        <th class="text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (user of users; track user.id) {
+                    <tr>
+                        <td>
+                            <div class="user-info">
+                                <div class="avatar">{{ user.fullName.charAt(0) | uppercase }}</div>
+                                <div class="info-text">
+                                    <span class="user-name">{{ user.fullName }}</span>
+                                    <span class="user-email">{{ user.email }}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <app-user-role-chip [role]="user.role"></app-user-role-chip>
+                        </td>
+                        <td>
+                            <app-user-status-chip [status]="user.status"></app-user-status-chip>
+                        </td>
+                        <td>
+                            <span class="date-text">{{ user.createdAt | date:'mediumDate' }}</span>
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <button class="action-btn view-btn" aria-label="View Details"
+                                    (click)="viewUser(user.id)" title="View Account">
+                                    <mat-icon>visibility</mat-icon>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    }
+
+</div>

@@ -43,10 +43,10 @@ export const MENU_ITEMS: MenuItem[] = [
 
   /* ─── MANAGE ─── */
   {
-    label: 'Students',
-    icon: 'school',
-    route: '/admin/students',
-    roles: [ROLES.ADMIN, ROLES.LECTURER],
+    label: 'Users',
+    icon: 'manage_accounts',
+    route: '/admin/users',
+    roles: [ROLES.ADMIN],
     section: 'Manage'
   },
   {
