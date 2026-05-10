@@ -1,0 +1,56 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="premium-form">
+
+    <div class="form-group">
+        <label for="fullName">Full Name</label>
+        <div class="input-wrapper" [class.error]="isInvalid('fullName')">
+            <mat-icon class="input-icon">person</mat-icon>
+            <input type="text" id="fullName" formControlName="fullName" placeholder="e.g. John Doe"
+                [readOnly]="isProcessing" />
+        </div>
+        @if (isInvalid('fullName')) {
+        <span class="error-text">Please enter a valid full name (min 3 characters).</span>
+        }
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email Address</label>
+        <div class="input-wrapper" [class.error]="isInvalid('email')">
+            <mat-icon class="input-icon">email</mat-icon>
+            <input type="email" id="email" formControlName="email" placeholder="e.g. john@brightclass.com"
+                [readOnly]="isProcessing" />
+        </div>
+        @if (isInvalid('email')) {
+        <span class="error-text">Please enter a valid email address.</span>
+        }
+    </div>
+
+    <div class="form-group">
+        <label for="password">Temporary Password</label>
+        <div class="input-wrapper" [class.error]="isInvalid('password')">
+            <mat-icon class="input-icon">lock</mat-icon>
+            <input [type]="hidePassword ? 'password' : 'text'" id="password" formControlName="password"
+                placeholder="Enter secure password" [readOnly]="isProcessing" />
+            <button type="button" class="toggle-btn" (click)="togglePasswordVisibility()" tabindex="-1">
+                <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+        </div>
+        @if (isInvalid('password')) {
+        <span class="error-text">Password must be at least 6 characters long.</span>
+        } @else {
+        <span class="hint-text">Minimum 6 characters. The lecturer can change this later.</span>
+        }
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="submit-btn" [disabled]="form.invalid || isProcessing">
+            @if (isProcessing) {
+            <mat-icon class="spinner">autorenew</mat-icon>
+            <span>Creating Account...</span>
+            } @else {
+            <mat-icon>person_add</mat-icon>
+            <span>Create Lecturer Account</span>
+            }
+        </button>
+    </div>
+
+</form>

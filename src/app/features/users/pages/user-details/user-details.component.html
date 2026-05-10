@@ -1,1 +1,111 @@
-<p>user-details works!</p>
+<div class="page-wrapper">
+
+    <div class="page-header">
+        <div class="header-left">
+            <button class="back-btn" (click)="goBack()" aria-label="Go Back">
+                <mat-icon>arrow_back</mat-icon>
+                <span>Back to Directory</span>
+            </button>
+            <div class="title-group">
+                <h1 class="page-title">User Profile</h1>
+                <p class="page-subtitle">Centralized view of the user's account and access rights.</p>
+            </div>
+        </div>
+
+        @if (user) {
+        <div class="header-right actions-group">
+            <app-user-role-chip [role]="user.role"></app-user-role-chip>
+            <app-user-status-chip [status]="user.status"></app-user-status-chip>
+        </div>
+        }
+    </div>
+
+    @if (isLoading) {
+    <div class="loading-state">
+        <mat-icon class="spinner">autorenew</mat-icon>
+        <p>Loading profile data...</p>
+    </div>
+    }
+
+    @if (!isLoading && user) {
+    <div class="content-grid">
+
+        <div class="main-column">
+
+            <div class="profile-card section-card">
+                <div class="profile-header-bg"></div>
+                <div class="profile-content">
+                    <div class="profile-avatar">
+                        {{ user.fullName.charAt(0) | uppercase }}
+                    </div>
+                    <div class="profile-info">
+                        <h2 class="profile-name">{{ user.fullName }}</h2>
+                        <p class="profile-email">
+                            <mat-icon>email</mat-icon>
+                            {{ user.email }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-header">
+                    <mat-icon class="header-icon">admin_panel_settings</mat-icon>
+                    <h2>System Access & Security</h2>
+                </div>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <label>System Role</label>
+                        <span>{{ user.role }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Account Status</label>
+                        <span>{{ user.status }}</span>
+                    </div>
+                    <div class="detail-item full-width">
+                        <label>Account Created On</label>
+                        <span class="date-highlight">
+                            <mat-icon>calendar_today</mat-icon>
+                            {{ user.createdAt | date:'longDate' }} at {{ user.createdAt | date:'shortTime' }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="side-column">
+
+            <div class="section-card future-card action-card">
+                <div class="section-header">
+                    <mat-icon class="header-icon danger-icon">gavel</mat-icon>
+                    <h2>Administrative Actions</h2>
+                </div>
+                <div class="placeholder-content">
+                    <p>Options to suspend account, reset password, or modify roles will be enabled here.</p>
+                    <button class="dummy-btn" disabled>
+                        <mat-icon>block</mat-icon> Suspend User
+                    </button>
+                    <button class="dummy-btn outline" disabled>
+                        <mat-icon>key</mat-icon> Reset Password
+                    </button>
+                </div>
+            </div>
+
+            <div class="section-card future-card">
+                <div class="section-header">
+                    <mat-icon class="header-icon">analytics</mat-icon>
+                    <h2>Activity Summary</h2>
+                </div>
+                <div class="placeholder-content">
+                    <mat-icon class="placeholder-icon">trending_up</mat-icon>
+                    <p>Enrollments, course progress, and financial history will be synced here.</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    }
+
+</div>

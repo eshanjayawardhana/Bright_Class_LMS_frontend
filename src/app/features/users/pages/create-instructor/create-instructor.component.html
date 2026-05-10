@@ -1,1 +1,38 @@
-<p>create-instructor works!</p>
+<div class="page-wrapper">
+
+    <div class="page-header">
+        <div class="header-left">
+            <button class="back-btn" (click)="goBack()" aria-label="Go Back">
+                <mat-icon>arrow_back</mat-icon>
+                <span>Back to Users</span>
+            </button>
+            <div class="title-group">
+                <h1 class="page-title">Create Lecturer Account</h1>
+                <p class="page-subtitle">Register a new lecturer to the system with secured access.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-container">
+        <div class="form-card">
+            <div class="card-header">
+                <mat-icon class="header-icon">admin_panel_settings</mat-icon>
+                <h2>Account Details</h2>
+            </div>
+
+            <div class="card-body">
+                <app-create-lecturer-form [isProcessing]="isSaving" (formSubmit)="handleFormSubmit($event)">
+                </app-create-lecturer-form>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <mat-icon class="info-icon">lightbulb</mat-icon>
+            <h3>What happens next?</h3>
+            <p>Once you create this account, the lecturer can log in using the email and temporary password provided.
+                They will have access to manage their courses and view student details based on their system
+                permissions.</p>
+        </div>
+    </div>
+
+</div>
