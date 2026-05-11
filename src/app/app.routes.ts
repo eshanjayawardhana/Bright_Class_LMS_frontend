@@ -54,6 +54,13 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/users/users.routes').then((m) => m.USERS_ROUTES),
       },
+      {
+        path: 'course-content',
+        loadChildren: () =>
+          import('./features/content/content.routes').then(
+            (m) => m.CONTENT_ROUTES,
+          ),
+      },
     ],
   },
 

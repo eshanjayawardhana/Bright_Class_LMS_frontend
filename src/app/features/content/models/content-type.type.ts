@@ -1,0 +1,1 @@
+export type ContentType = 'LIVE_CLASS' | 'RECORDED_VIDEO';
