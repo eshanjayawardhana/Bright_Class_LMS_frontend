@@ -1,1 +1,44 @@
-<p>upload-content works!</p>
+<div class="page-wrapper">
+
+  <div class="page-header">
+    <div class="header-left">
+      <button class="back-btn" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+        <span>Back to Materials</span>
+      </button>
+      <div class="title-group">
+        <h1>Add Learning Material</h1>
+        <p>Schedule a live class or attach a recorded video link for this course.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-container">
+    <div class="form-card">
+      <div class="card-header">
+        <mat-icon class="header-icon">library_add</mat-icon>
+        <h2>Material Details</h2>
+      </div>
+      
+      <div class="card-body">
+        @if (courseId) {
+          <app-content-form 
+            [courseId]="courseId"
+            [isProcessing]="isSaving"
+            (formSubmit)="handleFormSubmit($event)">
+          </app-content-form>
+        }
+      </div>
+    </div>
+    
+    <div class="info-card">
+      <mat-icon class="info-icon">tips_and_updates</mat-icon>
+      <h3>Link Guidelines</h3>
+      <ul>
+        <li><strong>Live Classes:</strong> Paste valid Zoom, MS Teams, or Google Meet links. Students will see the link active near the scheduled time.</li>
+        <li><strong>Recorded Videos:</strong> Use YouTube, Vimeo, or Google Drive links. Ensure the video permissions are set to 'Unlisted' or 'Public'.</li>
+      </ul>
+    </div>
+  </div>
+
+</div>

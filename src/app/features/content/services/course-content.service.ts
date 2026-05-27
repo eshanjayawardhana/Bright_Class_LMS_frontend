@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { CourseContent, CourseContentRequest } from '../models/course-content.model';
+import { CourseContent } from '../models/course-content.model';
 
 export interface ApiResponse<T> {
   message: string;
@@ -18,20 +18,18 @@ export class CourseContentService {
   private http = inject(HttpClient);
   private baseUrl = `${environment.apiUrl}/content`;
 
-  // For Admin and Lecturer
   getContentForManagement(courseId: number): Observable<CourseContent[]> {
     return this.http.get<ApiResponse<CourseContent[]>>(`${this.baseUrl}/manage/${courseId}`)
       .pipe(map(res => res.data));
   }
 
-  // For Student
   getContentForStudent(courseId: number): Observable<CourseContent[]> {
     return this.http.get<ApiResponse<CourseContent[]>>(`${this.baseUrl}/student/${courseId}`)
       .pipe(map(res => res.data));
   }
 
-  createContent(request: CourseContentRequest): Observable<CourseContent> {
-    return this.http.post<ApiResponse<CourseContent>>(this.baseUrl, request)
+  createContent(formData: FormData): Observable<CourseContent> {
+    return this.http.post<ApiResponse<CourseContent>>(this.baseUrl, formData)
       .pipe(map(res => res.data));
   }
 

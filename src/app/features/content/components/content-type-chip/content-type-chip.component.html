@@ -1,1 +1,3 @@
-<p>content-type-chip works!</p>
+<span class="type-chip" [ngClass]="type?.toLowerCase() || 'unknown'">
+  {{ getLabel() }}
+</span>

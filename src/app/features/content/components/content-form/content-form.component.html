@@ -1,0 +1,92 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="premium-form">
+
+  <div class="form-group type-selection">
+    <label>Material Type</label>
+    <div class="radio-group triple">
+      <label class="radio-card" [class.active]="isLiveClass">
+        <input type="radio" formControlName="contentType" value="LIVE_CLASS">
+        <mat-icon>videocam</mat-icon>
+        <div class="rc-text">
+          <strong>Live Class</strong>
+          <span>Zoom / Teams</span>
+        </div>
+      </label>
+      
+      <label class="radio-card" [class.active]="!isLiveClass && !isDocument">
+        <input type="radio" formControlName="contentType" value="RECORDED_VIDEO">
+        <mat-icon>play_circle</mat-icon>
+        <div class="rc-text">
+          <strong>Video</strong>
+          <span>YouTube Link</span>
+        </div>
+      </label>
+
+      <label class="radio-card" [class.active]="isDocument">
+        <input type="radio" formControlName="contentType" value="DOCUMENT">
+        <mat-icon>description</mat-icon>
+        <div class="rc-text">
+          <strong>Document Only</strong>
+          <span>No Video Link</span>
+        </div>
+      </label>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="flex-1 form-group">
+      <label for="title">Material Title</label>
+      <div class="input-wrapper" [class.error]="isInvalid('title')">
+        <mat-icon class="input-icon">title</mat-icon>
+        <input type="text" id="title" formControlName="title" placeholder="e.g. Day 01 - Introduction" [readOnly]="isProcessing" />
+      </div>
+    </div>
+
+    <div class="flex-1 form-group">
+      <label for="scheduledTime">
+        {{ isLiveClass ? 'Scheduled Time' : 'Class Held On / Date' }}
+      </label>
+      <div class="input-wrapper" [class.error]="isInvalid('scheduledTime')">
+        <mat-icon class="input-icon">event</mat-icon>
+        <input type="datetime-local" id="scheduledTime" formControlName="scheduledTime" [readOnly]="isProcessing" />
+      </div>
+    </div>
+  </div>
+
+  @if (!isDocument) {
+    <div class="form-group">
+      <label for="url">{{ isLiveClass ? 'Meeting Link' : 'Video Link' }}</label>
+      <div class="input-wrapper" [class.error]="isInvalid('url')">
+        <mat-icon class="input-icon">link</mat-icon>
+        <input type="url" id="url" formControlName="url" placeholder="https://..." [readOnly]="isProcessing" />
+      </div>
+    </div>
+  }
+
+  <div class="form-group attachment-section">
+    <label>
+      {{ isDocument ? 'Upload Documents (Required)' : 'Attach Class Notes / Tutes (Optional)' }}
+    </label>
+    <app-upload-zone (filesSelected)="onFilesSelected($event)"></app-upload-zone>
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description & Instructions</label>
+    <div class="input-wrapper textarea-wrapper" [class.error]="isInvalid('description')">
+      <mat-icon class="input-icon">subject</mat-icon>
+      <textarea id="description" formControlName="description" rows="3" placeholder="Enter details..." [readOnly]="isProcessing"></textarea>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="submit-btn" [disabled]="form.invalid || isProcessing || (isDocument && selectedFiles.length === 0)">
+      @if (isProcessing) {
+        <mat-icon class="spinner">autorenew</mat-icon>
+        <span>Saving Material...</span>
+      } @else {
+        <mat-icon>cloud_upload</mat-icon>
+        <span>Save to Course</span>
+      }
+    </button>
+  </div>
+
+</form>

@@ -1,1 +1,1 @@
-export type ContentType = 'LIVE_CLASS' | 'RECORDED_VIDEO';
+export type ContentType = 'LIVE_CLASS' | 'RECORDED_VIDEO' | 'DOCUMENT';

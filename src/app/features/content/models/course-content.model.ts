@@ -1,5 +1,11 @@
 import { ContentType } from './content-type.type';
 
+export interface ContentAttachment {
+  id: number;
+  fileName: string;
+  fileUrl: string;
+}
+
 export interface CourseContent {
   id: number;
   title: string;
@@ -10,6 +16,7 @@ export interface CourseContent {
   createdAt: string;
   courseId: number;
   lecturerName: string;
+  attachments?: ContentAttachment[];
 }
 
 export interface CourseContentRequest {

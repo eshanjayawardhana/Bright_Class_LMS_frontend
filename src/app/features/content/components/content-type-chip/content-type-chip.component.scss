@@ -1,0 +1,13 @@
+.type-chip {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-block;
+
+  &.live_class { background: #fef2f2; color: #dc2626; } /* Red for Live */
+  &.recorded_video { background: #eff6ff; color: #2563eb; } /* Blue for Recorded */
+  &.unknown { background: #f1f5f9; color: #64748b; }
+}

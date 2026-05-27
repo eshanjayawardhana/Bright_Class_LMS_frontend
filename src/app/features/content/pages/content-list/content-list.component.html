@@ -1,1 +1,168 @@
-<p>content-list works!</p>
+<div class="page-wrapper">
+
+  <!-- ── Page Header ─────────────────────────────────────────── -->
+  <div class="page-header">
+    <div class="header-left">
+      <div class="header-eyebrow">
+        <span class="eyebrow-dot"></span>
+        <span>Course Management</span>
+      </div>
+      <h1 class="page-title">Materials & Classes</h1>
+      <p class="page-subtitle">Manage recorded videos and schedule live classes for this course.</p>
+    </div>
+
+    <button class="btn btn-primary" (click)="navigateToAddContent()">
+      <mat-icon>add</mat-icon>
+      <span>Add Material</span>
+    </button>
+  </div>
+
+  <!-- ── Toolbar ─────────────────────────────────────────────── -->
+  <div class="toolbar">
+    <div class="search-box">
+      <mat-icon class="search-icon">search</mat-icon>
+      <input
+        type="text"
+        placeholder="Search by title or description…"
+        [(ngModel)]="searchTerm"
+        (input)="onSearch()"
+      />
+    </div>
+  </div>
+
+  <!-- ── Loading ─────────────────────────────────────────────── -->
+  @if (isLoading) {
+    <div class="state-card loading-state">
+      <div class="state-icon spin-icon">
+        <mat-icon>autorenew</mat-icon>
+      </div>
+      <p class="state-label">Loading course materials…</p>
+    </div>
+  }
+
+  <!-- ── Empty ───────────────────────────────────────────────── -->
+  @if (!isLoading && filteredContents.length === 0) {
+    <div class="state-card empty-state">
+      <div class="state-icon">
+        <mat-icon>video_library</mat-icon>
+      </div>
+      <h3 class="state-title">No learning materials found</h3>
+      <p class="state-body">Start by adding a recorded video or scheduling a live class.</p>
+      <button class="btn btn-outline" (click)="navigateToAddContent()">Add First Material</button>
+    </div>
+  }
+
+  <!-- ── Table ───────────────────────────────────────────────── -->
+  @if (!isLoading && filteredContents.length > 0) {
+    <div class="table-card">
+
+      <div class="table-header-bar">
+        <span class="record-count">{{ filteredContents.length }} item{{ filteredContents.length !== 1 ? 's' : '' }}</span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Material</th>
+              <th>Type</th>
+              <th>Scheduled Time</th>
+              <th>Lecturer</th>
+              <th>Added On</th>
+              <th class="text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of filteredContents; track item.id) {
+              <tr>
+
+                <!-- Material Info -->
+                <td>
+                  <div class="content-info">
+                    <div class="content-icon" [class.live]="item.contentType === 'LIVE_CLASS'">
+                      <mat-icon>{{ item.contentType === 'LIVE_CLASS' ? 'videocam' : 'play_circle' }}</mat-icon>
+                    </div>
+                    <div class="info-text">
+                      <span class="content-title">{{ item.title }}</span>
+                      <span class="content-desc">{{ item.description }}</span>
+                    </div>
+                  </div>
+                </td>
+
+                <!-- Type chip -->
+                <td>
+                  <app-content-type-chip [type]="item.contentType"></app-content-type-chip>
+                </td>
+
+                <!-- Scheduled time -->
+                <td>
+                  @if (item.scheduledTime) {
+                    <div class="schedule-cell">
+                      <mat-icon>schedule</mat-icon>
+                      <span>{{ item.scheduledTime | date:'MMM d, y' }}</span>
+                      <span class="time-part">{{ item.scheduledTime | date:'h:mm a' }}</span>
+                    </div>
+                  } @else {
+                    <span class="no-value">—</span>
+                  }
+                </td>
+
+                <!-- Lecturer -->
+                <td>
+                  <div class="lecturer-cell">
+                    <div class="lecturer-avatar">{{ item.lecturerName?.charAt(0) | uppercase }}</div>
+                    <span class="lecturer-name">{{ item.lecturerName }}</span>
+                  </div>
+                </td>
+
+                <!-- Added On -->
+                <td>
+                  <span class="date-text">{{ item.createdAt | date:'MMM d, y' }}</span>
+                </td>
+
+                <!-- Actions -->
+                <td>
+                  <div class="action-buttons">
+
+                    @if (item.contentType !== 'DOCUMENT' && item.url) {
+                      <a [href]="item.url" target="_blank" class="action-btn link-btn" title="Open link">
+                        <mat-icon>open_in_new</mat-icon>
+                        <span>Open</span>
+                      </a>
+                    }
+
+                    @if (item.attachments && item.attachments.length > 0) {
+                      <details class="attachments-dropdown">
+                        <summary class="action-btn doc-btn" title="View files">
+                          <mat-icon>attach_file</mat-icon>
+                          <span>Files ({{ item.attachments.length }})</span>
+                          <mat-icon class="drop-arrow">expand_more</mat-icon>
+                        </summary>
+                        <div class="dropdown-list">
+                          @for (doc of item.attachments; track doc.id) {
+                            <a [href]="doc.fileUrl" target="_blank" class="doc-item" [title]="doc.fileName">
+                              <mat-icon class="pdf-icon">picture_as_pdf</mat-icon>
+                              <span class="doc-name">{{ doc.fileName }}</span>
+                            </a>
+                          }
+                        </div>
+                      </details>
+                    }
+
+                    <button class="action-btn delete-btn" aria-label="Delete" (click)="deleteContent(item.id)" title="Delete">
+                      <mat-icon>delete_outline</mat-icon>
+                    </button>
+
+                  </div>
+                </td>
+
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  }
+
+</div>
