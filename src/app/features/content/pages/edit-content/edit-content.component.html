@@ -1,0 +1,35 @@
+<div class="page-wrapper">
+  
+  <div class="page-header">
+    <div class="header-left">
+      <button class="back-btn" (click)="goBack()" title="Back to Course Materials">
+        <mat-icon>arrow_back</mat-icon>
+        <span>Back to List</span>
+      </button>
+      
+      <div class="title-section">
+        <h1 class="page-title">Edit Material Details</h1>
+        <p class="page-subtitle">Update lesson information, schedule, or manage attached files.</p>
+      </div>
+    </div>
+  </div>
+
+  @if (isLoading) {
+    <div class="loading-state">
+      <mat-icon class="spinner">autorenew</mat-icon>
+      <p>Loading material details...</p>
+    </div>
+  } 
+  @else if (contentData) {
+    <div class="form-card">
+      <app-content-form 
+        [courseId]="courseId"
+        [isProcessing]="isSaving"
+        [isEditMode]="true"
+        [editData]="contentData"
+        (formSubmit)="onSubmit($event)">
+      </app-content-form>
+    </div>
+  }
+
+</div>

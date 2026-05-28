@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class UploadZoneComponent {
   @Output() filesSelected = new EventEmitter<File[]>();
+  @Input() existingFileNames: string[] = [];
 
   selectedFiles: File[] = [];
   isDragging = false;
@@ -42,15 +43,13 @@ export class UploadZoneComponent {
   }
 
   private handleFiles(files: File[]): void {
-    const newUniqueFiles = files.filter(
-      (newFile) =>
-        !this.selectedFiles.some(
-          (existingFile) => existingFile.name === newFile.name,
-        ),
+    const newUniqueFiles = files.filter(newFile => 
+      !this.selectedFiles.some(existingFile => existingFile.name === newFile.name) &&
+      !this.existingFileNames.includes(newFile.name)
     );
 
     if (newUniqueFiles.length < files.length) {
-      alert('Some files are already added and were skipped.');
+      alert('Some files are already attached or added. Duplicates were skipped!');
     }
 
     this.selectedFiles = [...this.selectedFiles, ...newUniqueFiles];

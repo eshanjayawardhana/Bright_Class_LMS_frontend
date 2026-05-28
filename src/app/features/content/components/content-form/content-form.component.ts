@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, OnChanges, SimpleChanges, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { UploadZoneComponent } from '../upload-zone/upload-zone.component';
+import { CourseContent, ContentAttachment } from '../../models/course-content.model';
 
 @Component({
   selector: 'app-content-form',
@@ -11,13 +12,20 @@ import { UploadZoneComponent } from '../upload-zone/upload-zone.component';
   templateUrl: './content-form.component.html',
   styleUrls: ['./content-form.component.scss']
 })
-export class ContentFormComponent implements OnInit {
+export class ContentFormComponent implements OnInit, OnChanges {
   @Input() isProcessing = false;
   @Input() courseId!: number;
+
+  @Input() isEditMode = false;
+  @Input() editData: CourseContent | null = null;
+
   @Output() formSubmit = new EventEmitter<FormData>();
 
   form!: FormGroup;
   selectedFiles: File[] = [];
+
+  existingAttachments: ContentAttachment[] = [];
+  deletedAttachmentIds: number[] = [];
 
   constructor(private fb: FormBuilder) {}
 
@@ -34,6 +42,30 @@ export class ContentFormComponent implements OnInit {
     this.form.get('contentType')?.valueChanges.subscribe(() => {
       this.onTypeChange();
     });
+
+    if (this.isEditMode && this.editData) {
+      this.patchFormValues();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['editData'] && this.editData && this.form) {
+      this.patchFormValues();
+    }
+  }
+
+  private patchFormValues(): void {
+    this.form.patchValue({
+      title: this.editData!.title,
+      description: this.editData!.description,
+      contentType: this.editData!.contentType,
+      url: this.editData!.url,
+      scheduledTime: this.editData!.scheduledTime
+    });
+    
+    if (this.editData!.attachments) {
+      this.existingAttachments = [...this.editData!.attachments];
+    }
   }
 
   onTypeChange(): void {
@@ -60,8 +92,17 @@ export class ContentFormComponent implements OnInit {
     return this.form.get('contentType')?.value === 'DOCUMENT';
   }
 
+  get existingFileNamesList(): string[] {
+    return this.existingAttachments.map(file => file.fileName);
+  }
+
   onFilesSelected(files: File[]): void {
     this.selectedFiles = files;
+  }
+
+  removeExistingAttachment(index: number): void {
+    const removedFile = this.existingAttachments.splice(index, 1)[0];
+    this.deletedAttachmentIds.push(removedFile.id);
   }
 
   onSubmit(): void {
@@ -70,7 +111,7 @@ export class ContentFormComponent implements OnInit {
       return;
     }
 
-    if (this.isDocument && this.selectedFiles.length === 0) {
+    if (this.isDocument && this.selectedFiles.length === 0 && this.existingAttachments.length === 0) {
       alert('At least one document file is required for Document type.');
       return;
     }
@@ -89,11 +130,16 @@ export class ContentFormComponent implements OnInit {
       formData.append('scheduledTime', this.form.get('scheduledTime')?.value);
     }
 
-  
     if (this.selectedFiles.length > 0) {
       for (let i = 0; i < this.selectedFiles.length; i++) {
         formData.append('files', this.selectedFiles[i]);
       }
+    }
+
+    if (this.deletedAttachmentIds.length > 0) {
+      this.deletedAttachmentIds.forEach(id => {
+        formData.append('deletedAttachmentIds', id.toString());
+      });
     }
 
     this.formSubmit.emit(formData);

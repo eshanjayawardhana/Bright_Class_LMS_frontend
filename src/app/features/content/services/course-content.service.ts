@@ -37,4 +37,12 @@ export class CourseContentService {
     return this.http.delete<ApiResponse<void>>(`${this.baseUrl}/${id}`)
       .pipe(map(() => void 0));
   }
+
+  getContentById(contentId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/edit/${contentId}`);
+  }
+
+  updateContent(contentId: number, formData: FormData): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${contentId}`, formData);
+  }
 }

@@ -11,7 +11,7 @@
           <span>Zoom / Teams</span>
         </div>
       </label>
-      
+
       <label class="radio-card" [class.active]="!isLiveClass && !isDocument">
         <input type="radio" formControlName="contentType" value="RECORDED_VIDEO">
         <mat-icon>play_circle</mat-icon>
@@ -37,7 +37,8 @@
       <label for="title">Material Title</label>
       <div class="input-wrapper" [class.error]="isInvalid('title')">
         <mat-icon class="input-icon">title</mat-icon>
-        <input type="text" id="title" formControlName="title" placeholder="e.g. Day 01 - Introduction" [readOnly]="isProcessing" />
+        <input type="text" id="title" formControlName="title" placeholder="e.g. Day 01 - Introduction"
+          [readOnly]="isProcessing" />
       </div>
     </div>
 
@@ -53,38 +54,77 @@
   </div>
 
   @if (!isDocument) {
-    <div class="form-group">
-      <label for="url">{{ isLiveClass ? 'Meeting Link' : 'Video Link' }}</label>
-      <div class="input-wrapper" [class.error]="isInvalid('url')">
-        <mat-icon class="input-icon">link</mat-icon>
-        <input type="url" id="url" formControlName="url" placeholder="https://..." [readOnly]="isProcessing" />
-      </div>
+  <div class="form-group">
+    <label for="url">{{ isLiveClass ? 'Meeting Link' : 'Video Link' }}</label>
+    <div class="input-wrapper" [class.error]="isInvalid('url')">
+      <mat-icon class="input-icon">link</mat-icon>
+      <input type="url" id="url" formControlName="url" placeholder="https://..." [readOnly]="isProcessing" />
     </div>
+  </div>
   }
 
   <div class="form-group attachment-section">
     <label>
       {{ isDocument ? 'Upload Documents (Required)' : 'Attach Class Notes / Tutes (Optional)' }}
     </label>
-    <app-upload-zone (filesSelected)="onFilesSelected($event)"></app-upload-zone>
+    @if (isEditMode && existingAttachments.length > 0) {
+    <div class="existing-files-section">
+      
+      <div class="section-header">
+        <label class="section-label">
+          <mat-icon class="folder-icon">folder_special</mat-icon>
+          Already Attached Files
+        </label>
+        <p class="section-hint">Click the bin icon to remove any file you no longer need.</p>
+      </div>
+
+      <div class="minimal-file-grid">
+        @for (file of existingAttachments; track file.id; let i = $index) {
+          <div class="minimal-file-card">
+            <div class="file-info">
+              <mat-icon class="pdf-icon">picture_as_pdf</mat-icon>
+              <span class="file-name" [title]="file.fileName">{{ file.fileName }}</span>
+            </div>
+            <button type="button" class="minimal-remove-btn" (click)="removeExistingAttachment(i)" title="Remove this file">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </div>
+        }
+      </div>
+
+    </div>
+  }
+    <div class="form-group attachment-section">
+    <label>
+      {{ isDocument ? 'Upload Documents (Required)' : 'Attach Class Notes / Tutes (Optional)' }}
+    </label>
+    
+    <app-upload-zone 
+      [existingFileNames]="existingFileNamesList"
+      (filesSelected)="onFilesSelected($event)">
+    </app-upload-zone>
+    
+  </div>
   </div>
 
   <div class="form-group">
     <label for="description">Description & Instructions</label>
     <div class="input-wrapper textarea-wrapper" [class.error]="isInvalid('description')">
       <mat-icon class="input-icon">subject</mat-icon>
-      <textarea id="description" formControlName="description" rows="3" placeholder="Enter details..." [readOnly]="isProcessing"></textarea>
+      <textarea id="description" formControlName="description" rows="3" placeholder="Enter details..."
+        [readOnly]="isProcessing"></textarea>
     </div>
   </div>
 
   <div class="form-actions">
-    <button type="submit" class="submit-btn" [disabled]="form.invalid || isProcessing || (isDocument && selectedFiles.length === 0)">
+    <button type="submit" class="submit-btn"
+      [disabled]="form.invalid || isProcessing || (isDocument && selectedFiles.length === 0)">
       @if (isProcessing) {
-        <mat-icon class="spinner">autorenew</mat-icon>
-        <span>Saving Material...</span>
+      <mat-icon class="spinner">autorenew</mat-icon>
+      <span>Saving Material...</span>
       } @else {
-        <mat-icon>cloud_upload</mat-icon>
-        <span>Save to Course</span>
+      <mat-icon>cloud_upload</mat-icon>
+      <span>Save to Course</span>
       }
     </button>
   </div>
