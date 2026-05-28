@@ -126,18 +126,37 @@
 
     <!-- Mobile bottom navigation -->
     <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
-      <a class="mob-item" routerLink="/admin/dashboard" routerLinkActive="active">
-        <mat-icon>dashboard</mat-icon>
-        <span>Home</span>
-      </a>
-      <button class="mob-item" (click)="openMobileMenu()">
-        <mat-icon>menu</mat-icon>
-        <span>Menu</span>
-      </button>
-      <a class="mob-item" routerLink="/admin/enrollment" routerLinkActive="active">
-        <mat-icon>people</mat-icon>
-        <span>Users</span>
-      </a>
+      
+      @if (userRole === 'Admin') {
+        <a class="mob-item" routerLink="/admin/dashboard" routerLinkActive="active">
+          <mat-icon>dashboard</mat-icon>
+          <span>Home</span>
+        </a>
+        <button class="mob-item" (click)="openMobileMenu()">
+          <mat-icon>menu</mat-icon>
+          <span>Menu</span>
+        </button>
+        <a class="mob-item" routerLink="/admin/enrollment" routerLinkActive="active">
+          <mat-icon>people</mat-icon>
+          <span>Users</span>
+        </a>
+      } 
+      
+      @else if (userRole === 'Lecturer') {
+        <a class="mob-item" routerLink="/lecturer/dashboard" routerLinkActive="active">
+          <mat-icon>dashboard</mat-icon>
+          <span>Home</span>
+        </a>
+        <button class="mob-item" (click)="openMobileMenu()">
+          <mat-icon>menu</mat-icon>
+          <span>Menu</span>
+        </button>
+        <a class="mob-item" routerLink="/admin/courses" routerLinkActive="active">
+          <mat-icon>school</mat-icon>
+          <span>Courses</span>
+        </a>
+      }
+
       <a class="mob-item" routerLink="/admin/settings" routerLinkActive="active">
         <mat-icon>person</mat-icon>
         <span>Profile</span>

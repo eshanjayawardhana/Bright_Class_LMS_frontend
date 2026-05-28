@@ -32,4 +32,12 @@ export class AuthService {
   isAuthenticated(): boolean {
     return this.tokenService.isLoggedIn();
   }
+
+  getUserRole(): string | null {
+    return localStorage.getItem('userRole');
+  }
+
+  isAdmin(): boolean {
+    return this.getUserRole() === 'ADMIN';
+  }
 }

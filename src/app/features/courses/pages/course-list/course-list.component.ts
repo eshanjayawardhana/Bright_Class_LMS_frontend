@@ -10,6 +10,7 @@ import { CourseService } from '../../services/course.service';
 import { Course } from '../../models/course.model';
 import { ToastService } from '../../../../core/services/toast.service';
 import { DeleteCourseDialogComponent } from '../../components/delete-course-dialog/delete-course-dialog.component';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-course-list',
@@ -23,6 +24,9 @@ export class CourseListComponent implements OnInit, OnDestroy {
   private toastService = inject(ToastService);
   private router = inject(Router);
 
+  private authService = inject(AuthService);
+  isAdmin = false;
+
   courses: Course[] = [];
   loading = true;
   searchTerm = '';
@@ -35,13 +39,16 @@ export class CourseListComponent implements OnInit, OnDestroy {
   isDeleting = false;
 
   ngOnInit(): void {
-    this.loadCourses();
+    this.isAdmin = this.authService.isAdmin();
 
-    this.searchSubscription = this.searchSubject
-      .pipe(debounceTime(300), distinctUntilChanged())
-      .subscribe((term) => {
-        this.loadCourses(term);
-      });
+    this.searchSubscription = this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe((searchTerm) => {
+      this.loadCourses(searchTerm);
+    });
+
+    this.loadCourses();
   }
 
   ngOnDestroy(): void {

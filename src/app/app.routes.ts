@@ -21,22 +21,18 @@ export const routes: Routes = [
         (m) => m.AdminLayoutComponent,
       ),
     children: [
+      // 🔴 Only ADMIN 
       {
         path: 'dashboard',
+        canActivate: [roleGuard([ROLES.ADMIN])],
         loadComponent: () =>
           import('./features/dashboard/pages/admin-dashboard/admin-dashboard.component').then(
             (m) => m.AdminDashboardComponent,
           ),
       },
       {
-        path: 'courses',
-        loadChildren: () =>
-          import('./features/courses/courses.routes').then(
-            (m) => m.COURSE_ROUTES,
-          ),
-      },
-      {
         path: 'enrollment',
+        canActivate: [roleGuard([ROLES.ADMIN])],
         loadChildren: () =>
           import('./features/enrollment/enrollment.routes').then(
             (m) => m.ENROLLMENT_ROUTES,
@@ -44,6 +40,7 @@ export const routes: Routes = [
       },
       {
         path: 'payments',
+        canActivate: [roleGuard([ROLES.ADMIN])],
         loadChildren: () =>
           import('./features/payment/payment.routes').then(
             (m) => m.PAYMENT_ROUTES,
@@ -51,8 +48,18 @@ export const routes: Routes = [
       },
       {
         path: 'users',
+        canActivate: [roleGuard([ROLES.ADMIN])],
         loadChildren: () =>
           import('./features/users/users.routes').then((m) => m.USERS_ROUTES),
+      },
+
+      // 🟢 ADMIN and LECTURER 
+      {
+        path: 'courses',
+        loadChildren: () =>
+          import('./features/courses/courses.routes').then(
+            (m) => m.COURSE_ROUTES,
+          ),
       },
       {
         path: 'course-content',

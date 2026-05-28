@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CourseService } from '../../services/course.service';
 import { ToastService } from '../../../../core/services/toast.service';
 import { Course } from '../../models/course.model';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-course-details',
@@ -19,11 +20,15 @@ export class CourseDetailsComponent implements OnInit {
   private router = inject(Router);
   private courseService = inject(CourseService);
   private toastService = inject(ToastService);
+  private authService = inject(AuthService);
 
   course: Course | null = null;
   isLoading = true;
+  isAdmin = false;
 
   ngOnInit(): void {
+    this.isAdmin = this.authService.isAdmin();
+
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
       this.loadCourse(Number(idParam));

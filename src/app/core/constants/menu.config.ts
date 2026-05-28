@@ -11,13 +11,32 @@ export interface MenuItem {
 
 export const MENU_ITEMS: MenuItem[] = [
   /* ─── MAIN ─── */
+  
+  // 🔴 1. Admin's Dashboard
   {
     label: 'Dashboard',
     icon: 'dashboard',
     route: '/admin/dashboard',
-    roles: [ROLES.ADMIN, ROLES.LECTURER, ROLES.STUDENT],
+    roles: [ROLES.ADMIN],
     section: 'Main'
   },
+  // 🔵 2. Lecturer's Dashboard
+  {
+    label: 'Dashboard',
+    icon: 'dashboard',
+    route: '/lecturer/dashboard',
+    roles: [ROLES.LECTURER],
+    section: 'Main'
+  },
+  // 🟢 3. Student's Dashboard
+  {
+    label: 'Dashboard',
+    icon: 'dashboard',
+    route: '/student/dashboard',
+    roles: [ROLES.STUDENT],
+    section: 'Main'
+  },
+
   {
     label: 'Courses',
     icon: 'auto_stories',

@@ -5,10 +5,12 @@
             <h1 class="page-title">Course Management</h1>
             <p class="page-subtitle">Manage, update, and track all your platform courses here.</p>
         </div>
+        @if (isAdmin) {
         <button class="btn btn-primary" (click)="createCourse()">
             <mat-icon>add</mat-icon>
             <span>Create Course</span>
         </button>
+        }
     </div>
 
     <div class="toolbar">
@@ -33,7 +35,10 @@
         </div>
         <h3>No courses found</h3>
         <p>Get started by creating your first course.</p>
+        
+        @if (isAdmin) {
         <button class="mt-3 btn btn-primary" (click)="createCourse()">Create Course</button>
+        }
     </div>
     }
 
@@ -81,6 +86,7 @@
                                     <mat-icon>library_books</mat-icon>
                                 </button>
 
+                                @if (isAdmin) {
                                 <button class="action-btn edit-btn" aria-label="Edit" (click)="editCourse(course.id)" title="Edit Course">
                                     <mat-icon>edit</mat-icon>
                                 </button>
@@ -88,6 +94,7 @@
                                     (click)="openDeleteDialog(course)" title="Delete Course">
                                     <mat-icon>delete_outline</mat-icon>
                                 </button>
+                                }
                             </div>
                         </td>
                     </tr>
