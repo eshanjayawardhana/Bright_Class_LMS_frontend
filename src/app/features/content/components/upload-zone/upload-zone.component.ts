@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-upload-zone',
@@ -49,7 +50,16 @@ export class UploadZoneComponent {
     );
 
     if (newUniqueFiles.length < files.length) {
-      alert('Some files are already attached or added. Duplicates were skipped!');
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'warning',
+        title: 'Duplicates Skipped!',
+        text: 'Some files are already attached.',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true
+      });
     }
 
     this.selectedFiles = [...this.selectedFiles, ...newUniqueFiles];

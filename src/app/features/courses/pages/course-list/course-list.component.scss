@@ -55,6 +55,17 @@
     }
 }
 
+.content-btn {
+  color: #8b5cf6; 
+  background: #f5f3ff;
+  border-color: #ddd6fe;
+
+  &:hover { 
+    background: #ede9fe; 
+    border-color: #c4b5fd; 
+  }
+}
+
 .toolbar {
     display: flex;
     gap: 16px;

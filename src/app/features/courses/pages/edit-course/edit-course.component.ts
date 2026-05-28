@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 import { CourseFormComponent } from '../../components/course-form/course-form.component';
 import { CourseService } from '../../services/course.service';
@@ -54,16 +55,30 @@ export class EditCourseComponent implements OnInit {
   }
 
   handleUpdate(formData: UpdateCourseRequest): void {
-    this.isSaving = true;
-    this.courseService.updateCourse(this.courseId, formData).subscribe({
-      next: () => {
-        this.isSaving = false;
-        this.toastService.success('Course updated successfully!', 'Success');
-        this.router.navigate(['/admin/courses']);
-      },
-      error: () => {
-        this.isSaving = false;
-      },
+    Swal.fire({
+      title: 'Save Changes?',
+      text: 'Are you sure you want to update this course details?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3b82f6',
+      cancelButtonColor: '#94a3b8',
+      confirmButtonText: 'Yes, update it!'
+    }).then((result) => {
+      
+      if (result.isConfirmed) {
+        this.isSaving = true;
+        this.courseService.updateCourse(this.courseId, formData).subscribe({
+          next: () => {
+            this.isSaving = false;
+            this.toastService.success('Course updated successfully!', 'Success');
+            this.router.navigate(['/admin/courses']);
+          },
+          error: () => {
+            this.isSaving = false;
+          },
+        });
+      }
+      
     });
   }
 }

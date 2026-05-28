@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 import { CourseContentService } from '../../services/course-content.service';
-import { ToastService } from '../../../../core/services/toast.service';
 import { CourseContent } from '../../models/course-content.model';
 import { ContentTypeChipComponent } from '../../components/content-type-chip/content-type-chip.component';
 
@@ -26,7 +26,6 @@ export class ContentListComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private contentService = inject(CourseContentService);
-  private toastService = inject(ToastService);
 
   courseId!: number;
   contents: CourseContent[] = [];
@@ -35,14 +34,26 @@ export class ContentListComponent implements OnInit {
 
   searchTerm = '';
 
+  Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  });
+
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('courseId');
     if (idParam) {
       this.courseId = Number(idParam);
       this.loadContents();
     } else {
-      this.toastService.error('Course ID is missing.');
-      this.router.navigate(['/admin/courses']); // Fallback route
+      this.Toast.fire({ icon: 'error', title: 'Course ID is missing.' });
+      this.router.navigate(['/admin/courses']);
     }
   }
 
@@ -56,7 +67,7 @@ export class ContentListComponent implements OnInit {
       },
       error: () => {
         this.isLoading = false;
-        this.toastService.error('Failed to load course contents.');
+        this.Toast.fire({ icon: 'error', title: 'Failed to load course contents.' });
       }
     });
   }
@@ -80,17 +91,36 @@ export class ContentListComponent implements OnInit {
   }
 
   deleteContent(id: number): void {
-    if (!confirm('Are you sure you want to delete this learning material?')) return;
-
-    this.contentService.deleteContent(id).subscribe({
-      next: () => {
-        this.toastService.success('Content deleted successfully.');
-        this.loadContents();
-      },
-      error: () => {
-        this.toastService.error('Failed to delete content.');
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this! All attached files will be deleted.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#e11d48',
+      cancelButtonColor: '#94a3b8',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.contentService.deleteContent(id).subscribe({
+          next: () => {
+            this.Toast.fire({ icon: 'success', title: 'Material deleted successfully' });
+            this.loadContents();
+          },
+          error: () => {
+            Swal.fire('Error!', 'Failed to delete the material.', 'error');
+          }
+        });
       }
     });
+  }
+
+  goBack(): void {
+    this.router.navigate(['/admin/courses']);
+  }
+
+  editContent(contentId: number): void {
+    this.router.navigate([`/admin/course-content/edit/${contentId}`]);
   }
 
   navigateToAddContent(): void {

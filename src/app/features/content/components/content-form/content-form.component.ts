@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { MatIconModule } from '@angular/material/icon';
 import { UploadZoneComponent } from '../upload-zone/upload-zone.component';
 import { CourseContent, ContentAttachment } from '../../models/course-content.model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-content-form',
@@ -15,15 +16,12 @@ import { CourseContent, ContentAttachment } from '../../models/course-content.mo
 export class ContentFormComponent implements OnInit, OnChanges {
   @Input() isProcessing = false;
   @Input() courseId!: number;
-
   @Input() isEditMode = false;
   @Input() editData: CourseContent | null = null;
-
   @Output() formSubmit = new EventEmitter<FormData>();
 
   form!: FormGroup;
   selectedFiles: File[] = [];
-
   existingAttachments: ContentAttachment[] = [];
   deletedAttachmentIds: number[] = [];
 
@@ -112,7 +110,12 @@ export class ContentFormComponent implements OnInit, OnChanges {
     }
 
     if (this.isDocument && this.selectedFiles.length === 0 && this.existingAttachments.length === 0) {
-      alert('At least one document file is required for Document type.');
+      Swal.fire({
+        title: 'Missing Files!',
+        text: 'At least one document file is required for the "Document Only" type.',
+        icon: 'warning',
+        confirmButtonColor: '#2563eb'
+      });
       return;
     }
 

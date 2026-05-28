@@ -73,14 +73,19 @@
                         </td>
                         <td>
                             <div class="actions">
-                                <button class="action-btn view-btn" aria-label="View" (click)="viewCourse(course.id)">
+                                <button class="action-btn view-btn" aria-label="View" (click)="viewCourse(course.id)" title="View Course Details">
                                     <mat-icon>visibility</mat-icon>
                                 </button>
-                                <button class="action-btn edit-btn" aria-label="Edit" (click)="editCourse(course.id)">
+                                
+                                <button class="action-btn content-btn" aria-label="Manage Content" (click)="manageContent(course.id)" title="Manage Materials & Classes">
+                                    <mat-icon>library_books</mat-icon>
+                                </button>
+
+                                <button class="action-btn edit-btn" aria-label="Edit" (click)="editCourse(course.id)" title="Edit Course">
                                     <mat-icon>edit</mat-icon>
                                 </button>
                                 <button class="action-btn delete-btn" aria-label="Delete"
-                                    (click)="openDeleteDialog(course)">
+                                    (click)="openDeleteDialog(course)" title="Delete Course">
                                     <mat-icon>delete_outline</mat-icon>
                                 </button>
                             </div>

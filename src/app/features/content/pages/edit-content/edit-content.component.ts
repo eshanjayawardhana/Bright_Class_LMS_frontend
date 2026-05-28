@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ContentFormComponent } from '../../components/content-form/content-form.component'; 
+import { ContentFormComponent } from '../../components/content-form/content-form.component';
 import { CourseContent } from '../../models/course-content.model';
 import { MatIconModule } from '@angular/material/icon';
 import { CourseContentService } from '../../services/course-content.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-edit-content',
   standalone: true,
   imports: [CommonModule, ContentFormComponent, MatIconModule],
   templateUrl: './edit-content.component.html',
-  styleUrls: ['./edit-content.component.scss']
+  styleUrls: ['./edit-content.component.scss'],
 })
 export class EditContentComponent implements OnInit {
   contentId!: number;
@@ -20,10 +21,18 @@ export class EditContentComponent implements OnInit {
   isLoading = true;
   isSaving = false;
 
+  Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+  });
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private courseContentService: CourseContentService
+    private courseContentService: CourseContentService,
   ) {}
 
   ngOnInit(): void {
@@ -39,24 +48,45 @@ export class EditContentComponent implements OnInit {
         this.isLoading = false;
       },
       error: () => {
-        console.error('Failed to load content details');
         this.isLoading = false;
-        alert('Failed to load content details');
-      }
+        Swal.fire('Oops...', 'Failed to load content details!', 'error');
+        this.goBack();
+      },
     });
   }
 
   onSubmit(formData: FormData): void {
-    this.isSaving = true;
-    this.courseContentService.updateContent(this.contentId, formData).subscribe({
-      next: () => {
-        alert('Content updated successfully!');
-        this.router.navigate(['/admin/course-content', this.courseId]);
-      },
-      error: (err) => {
-        console.error(err);
-        alert('Failed to update content');
-        this.isSaving = false;
+    Swal.fire({
+      title: 'Save Changes?',
+      text: 'Are you sure you want to update this material?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3b82f6',
+      cancelButtonColor: '#94a3b8',
+      confirmButtonText: 'Yes, update it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.isSaving = true;
+        this.courseContentService
+          .updateContent(this.contentId, formData)
+          .subscribe({
+            next: () => {
+              this.Toast.fire({
+                icon: 'success',
+                title: 'Content updated successfully!',
+              });
+              this.router.navigate(['/admin/course-content', this.courseId]);
+            },
+            error: (err) => {
+              console.error(err);
+              Swal.fire(
+                'Error!',
+                'Failed to update content. Please try again.',
+                'error',
+              );
+              this.isSaving = false;
+            },
+          });
       }
     });
   }

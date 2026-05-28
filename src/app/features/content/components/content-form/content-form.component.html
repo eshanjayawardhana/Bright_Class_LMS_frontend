@@ -63,13 +63,14 @@
   </div>
   }
 
+  <!-- 🛠️ මෙන්න හදපු අලුත් Attachment Section එක -->
   <div class="form-group attachment-section">
     <label>
       {{ isDocument ? 'Upload Documents (Required)' : 'Attach Class Notes / Tutes (Optional)' }}
     </label>
+    
     @if (isEditMode && existingAttachments.length > 0) {
     <div class="existing-files-section">
-      
       <div class="section-header">
         <label class="section-label">
           <mat-icon class="folder-icon">folder_special</mat-icon>
@@ -91,20 +92,15 @@
           </div>
         }
       </div>
-
     </div>
-  }
-    <div class="form-group attachment-section">
-    <label>
-      {{ isDocument ? 'Upload Documents (Required)' : 'Attach Class Notes / Tutes (Optional)' }}
-    </label>
+    }
     
+    <!-- Upload Zone එක මෙතනට ගත්තා, Duplicate Label එක අයින් කළා -->
     <app-upload-zone 
       [existingFileNames]="existingFileNamesList"
       (filesSelected)="onFilesSelected($event)">
     </app-upload-zone>
     
-  </div>
   </div>
 
   <div class="form-group">
@@ -117,8 +113,9 @@
   </div>
 
   <div class="form-actions">
+    <!-- 🛠️ Submit බොත්තමේ Logic එක හැදුවා -->
     <button type="submit" class="submit-btn"
-      [disabled]="form.invalid || isProcessing || (isDocument && selectedFiles.length === 0)">
+      [disabled]="form.invalid || isProcessing || (isDocument && selectedFiles.length === 0 && existingAttachments.length === 0)">
       @if (isProcessing) {
       <mat-icon class="spinner">autorenew</mat-icon>
       <span>Saving Material...</span>

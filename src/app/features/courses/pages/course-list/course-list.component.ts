@@ -82,6 +82,11 @@ export class CourseListComponent implements OnInit, OnDestroy {
     this.router.navigate([`/admin/courses/${id}`]);
   }
 
+  manageContent(id: number): void {
+    this.router.navigate([`/admin/course-content/${id}`]);
+  }
+  
+
   openDeleteDialog(course: Course): void {
     this.selectedCourseForDelete = course;
     this.showDeleteDialog = true;

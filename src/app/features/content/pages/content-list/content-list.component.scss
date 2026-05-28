@@ -43,6 +43,11 @@
   flex-shrink: 0;
 }
 
+.header-actions {
+    display: flex;
+    gap: 12px;
+}
+
 .page-title {
   font-size: 26px;
   font-weight: 700;
@@ -485,6 +490,47 @@
 
     .pdf-icon { color: #ef4444; font-size: 15px; width: 15px; height: 15px; flex-shrink: 0; }
     .doc-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; }
+  }
+}
+
+/* ─── Back Button ─── */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 12px;
+
+  &:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+    border-color: #cbd5e1;
+  }
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* ─── Edit Button ─── */
+.edit-btn {
+  color: #d97706;
+  background: #fef3c7; 
+  border-color: #fde68a;
+  padding: 6px 8px;
+  
+  &:hover { 
+    background: #fde68a; 
   }
 }
 
