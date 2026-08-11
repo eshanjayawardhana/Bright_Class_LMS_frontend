@@ -1,0 +1,55 @@
+<div class="learning-page">
+  <div class="page-header">
+    <button class="back-btn" (click)="goBack()">
+      ← Back to Courses
+    </button>
+  </div>
+
+  @if (loading) {
+    <div class="state-card">
+      Loading lessons...
+    </div>
+  }
+
+  @if (!loading && activeLesson) {
+    <div class="learning-layout">
+      
+      <app-learning-sidebar
+        [lessons]="lessons"
+        [activeLessonId]="activeLesson.id"
+        (lessonSelected)="selectLesson($event)">
+      </app-learning-sidebar>
+
+      <div class="viewer-section">
+        <div class="viewer-header">
+          <h1>{{ activeLesson.title }}</h1>
+          <span class="badge">{{ activeLesson.type }}</span>
+        </div>
+
+        @if (activeLesson.type === 'VIDEO') {
+          <div class="viewer-container">
+            <app-video-preview [url]="activeLesson.externalUrl || ''"></app-video-preview>
+          </div>
+        }
+
+        @if (activeLesson.type === 'PDF') {
+          <div class="viewer-container">
+            <app-pdf-preview [url]="activeLesson.fileUrl || ''"></app-pdf-preview>
+          </div>
+        }
+
+        @if (activeLesson.type === 'DOCUMENT') {
+          <div class="document-card">
+            <div class="doc-icon">📄</div>
+            <h3>Download Material</h3>
+            <p>This lesson contains a downloadable document.</p>
+            <a [href]="activeLesson.fileUrl" target="_blank" class="download-btn">
+              Download Document
+            </a>
+          </div>
+        }
+      </div>
+
+    </div>
+  }
+</div>

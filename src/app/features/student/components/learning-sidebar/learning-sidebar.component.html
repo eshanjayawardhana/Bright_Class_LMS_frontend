@@ -1,0 +1,16 @@
+<div class="sidebar">
+  <div class="sidebar-header">
+    <h3>Course Lessons</h3>
+    <span>{{ lessons.length }} lessons available</span>
+  </div>
+
+  <div class="lesson-list">
+    @for (lesson of lessons; track lesson.id) {
+      <app-lesson-card
+        [lesson]="lesson"
+        [active]="activeLessonId === lesson.id"
+        (selectLesson)="selectLesson($event)">
+      </app-lesson-card>
+    }
+  </div>
+</div>

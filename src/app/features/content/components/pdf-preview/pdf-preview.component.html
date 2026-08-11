@@ -1,0 +1,9 @@
+<div class="pdf-container">
+  @if (safeUrl) {
+    <iframe [src]="safeUrl" title="PDF Viewer"></iframe>
+  } @else {
+    <div class="empty-state">
+      <p>No PDF document available to preview.</p>
+    </div>
+  }
+</div>

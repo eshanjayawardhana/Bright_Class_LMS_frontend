@@ -1,0 +1,33 @@
+<section class="hero">
+  <div class="hero-content">
+    <span class="category">{{ course.category }}</span>
+    <h1>{{ course.title }}</h1>
+    <p>{{ course.description }}</p>
+
+    <div class="meta">
+      <span>👨‍🏫 {{ course.instructorName }}</span>
+      @if (course.duration) {
+        <span>⏱ {{ course.duration }}</span>
+      }
+      @if (course.level) {
+        <span>🎯 {{ course.level }}</span>
+      }
+    </div>
+
+    @if (course.price) {
+      <div class="price">
+        Rs. {{ course.price }}
+      </div>
+    }
+  </div>
+
+  <div class="hero-image">
+    @if (course.thumbnail) {
+      <img [src]="course.thumbnail" [alt]="course.title" />
+    } @else {
+      <div class="placeholder">
+        {{ course.title.charAt(0) }}
+      </div>
+    }
+  </div>
+</section>

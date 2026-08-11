@@ -1,0 +1,14 @@
+<div class="video-container">
+  @if (safeUrl) {
+    <iframe
+      [src]="safeUrl"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+  } @else {
+    <div class="invalid-url">
+      <p>Invalid or unsupported video URL provided.</p>
+    </div>
+  }
+</div>

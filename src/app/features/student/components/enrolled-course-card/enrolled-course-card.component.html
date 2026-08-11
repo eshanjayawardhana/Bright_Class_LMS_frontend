@@ -1,0 +1,36 @@
+<div class="course-card">
+  <div class="thumbnail">
+    @if (course.thumbnail) {
+      <img [src]="course.thumbnail" [alt]="course.title" />
+    } @else {
+      <div class="placeholder">
+        {{ course.title.charAt(0) }}
+      </div>
+    }
+  </div>
+
+  <div class="content">
+    <div class="course-info">
+      <h3>{{ course.title }}</h3>
+      <p>{{ course.description }}</p>
+    </div>
+
+    <div class="meta">
+      <span>Instructor: {{ course.instructorName }}</span>
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-header">
+        <span>Progress</span>
+        <strong>{{ course.progress }}%</strong>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" [style.width.%]="course.progress"></div>
+      </div>
+    </div>
+
+    <a class="continue-btn" [routerLink]="['/student/courses', course.id]">
+      Continue Learning
+    </a>
+  </div>
+</div>

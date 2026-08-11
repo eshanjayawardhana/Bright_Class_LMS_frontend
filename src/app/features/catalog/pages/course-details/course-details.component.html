@@ -1,0 +1,40 @@
+<div class="details-page">
+  @if (loading) {
+    <div class="state-card">
+      Loading course details...
+    </div>
+  }
+
+  @if (!loading && course) {
+    <app-course-hero [course]="course"></app-course-hero>
+
+    <div class="details-grid">
+      <div class="content-section">
+        <section class="card">
+          <h2>About This Course</h2>
+          <p>{{ course.description }}</p>
+        </section>
+
+        <section class="card">
+          <h2>What You'll Learn</h2>
+          <ul>
+            <li>Build practical industry skills</li>
+            <li>Learn real-world workflows</li>
+            <li>Work with modern technologies</li>
+            <li>Improve professional knowledge</li>
+          </ul>
+        </section>
+      </div>
+
+      <aside class="sidebar">
+        <div class="enroll-card">
+          <h3>Ready to Start Learning?</h3>
+          <p>Enroll now and access professional learning materials.</p>
+          <button class="enroll-btn" (click)="enroll()">
+            Enroll Now
+          </button>
+        </div>
+      </aside>
+    </div>
+  }
+</div>

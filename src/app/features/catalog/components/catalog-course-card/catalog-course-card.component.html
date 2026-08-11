@@ -1,0 +1,35 @@
+<div class="catalog-card">
+  <div class="thumbnail">
+    @if (course.thumbnail) {
+      <img [src]="course.thumbnail" [alt]="course.title" />
+    } @else {
+      <div class="placeholder">
+        {{ course.title.charAt(0) }}
+      </div>
+    }
+  </div>
+
+  <div class="content">
+    <div class="top">
+      <span class="category">{{ course.category }}</span>
+      <h3>{{ course.title }}</h3>
+      <p>{{ course.description }}</p>
+    </div>
+
+    <div class="meta">
+      <span>👨‍🏫 {{ course.instructorName }}</span>
+      @if (course.duration) {
+        <span>⏱ {{ course.duration }}</span>
+      }
+    </div>
+
+    <div class="footer">
+      @if (course.price) {
+        <strong>Rs. {{ course.price }}</strong>
+      }
+      <a [routerLink]="['/catalog', course.id]" class="view-btn">
+        View Course
+      </a>
+    </div>
+  </div>
+</div>

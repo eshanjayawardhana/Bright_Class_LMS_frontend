@@ -1,0 +1,41 @@
+<div class="catalog-page">
+  <section class="hero-section">
+    <div class="hero-content">
+      <span class="badge">🚀 Learn Without Limits</span>
+      <h1>Explore Our Courses</h1>
+      <p>
+        Discover professional learning programs and continue your educational journey.
+      </p>
+    </div>
+  </section>
+
+  <section class="search-section">
+    <input 
+      type="text" 
+      placeholder="Search courses by name or category..." 
+      [(ngModel)]="searchTerm" 
+      (input)="filterCourses()" 
+    />
+  </section>
+
+  @if (loading) {
+    <div class="state-card">
+      Loading courses...
+    </div>
+  }
+
+  @if (!loading && filteredCourses.length === 0) {
+    <div class="state-card">
+      <h3>No courses found</h3>
+      <p>Try adjusting your search criteria.</p>
+    </div>
+  }
+
+  @if (!loading && filteredCourses.length > 0) {
+    <section class="courses-grid">
+      @for (course of filteredCourses; track course.id) {
+        <app-catalog-course-card [course]="course"></app-catalog-course-card>
+      }
+    </section>
+  }
+</div>

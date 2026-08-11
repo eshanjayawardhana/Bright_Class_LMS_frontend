@@ -1,0 +1,49 @@
+<div class="dashboard-page">
+  <section class="hero-section">
+    <div class="hero-content">
+      <span class="welcome">Welcome back 👋</span>
+      <h1>{{ studentName }}</h1>
+      <p>Continue your learning journey and track your progress.</p>
+    </div>
+  </section>
+
+  @if (loading) {
+    <div class="state-card">
+      Loading dashboard...
+    </div>
+  }
+
+  @if (!loading && progress) {
+    <div class="progress-grid">
+      <app-progress-card
+        title="Enrolled Courses"
+        [value]="progress.totalCourses"
+        subtitle="Courses">
+      </app-progress-card>
+
+      <app-progress-card
+        title="Completed Lessons"
+        [value]="progress.completedLessons"
+        subtitle="Lessons">
+      </app-progress-card>
+
+      <app-progress-card
+        title="Overall Progress"
+        [value]="progress.progressPercentage + '%'"
+        subtitle="Progress">
+      </app-progress-card>
+    </div>
+
+    <section class="courses-section">
+      <div class="section-header">
+        <h2>My Courses</h2>
+      </div>
+
+      <div class="courses-grid">
+        @for (course of courses; track course.id) {
+          <app-enrolled-course-card [course]="course"></app-enrolled-course-card>
+        }
+      </div>
+    </section>
+  }
+</div>

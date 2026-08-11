@@ -21,7 +21,7 @@ export const routes: Routes = [
         (m) => m.AdminLayoutComponent,
       ),
     children: [
-      // 🔴 Only ADMIN 
+      // 🔴 Only ADMIN
       {
         path: 'dashboard',
         canActivate: [roleGuard([ROLES.ADMIN])],
@@ -53,7 +53,7 @@ export const routes: Routes = [
           import('./features/users/users.routes').then((m) => m.USERS_ROUTES),
       },
 
-      // 🟢 ADMIN and LECTURER 
+      // 🟢 ADMIN and LECTURER
       {
         path: 'courses',
         loadChildren: () =>
@@ -81,10 +81,10 @@ export const routes: Routes = [
       ),
     children: [
       {
-        path: 'dashboard',
-        loadComponent: () =>
-          import('./features/dashboard/pages/student-dashboard/student-dashboard.component').then(
-            (m) => m.StudentDashboardComponent,
+        path: '',
+        loadChildren: () =>
+          import('./features/student/student.routes').then(
+            (m) => m.STUDENT_ROUTES,
           ),
       },
     ],
@@ -107,6 +107,11 @@ export const routes: Routes = [
           ),
       },
     ],
+  },
+  {
+    path: 'catalog',
+    loadChildren: () =>
+      import('./features/catalog/catalog.routes').then((m) => m.CATALOG_ROUTES)
   },
 
   // Fallback Route

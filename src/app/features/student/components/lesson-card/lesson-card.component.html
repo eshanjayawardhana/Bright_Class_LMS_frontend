@@ -1,0 +1,18 @@
+<button class="lesson-card" [class.active]="active" (click)="select()">
+  <div class="lesson-type">
+    @if (lesson.type === 'VIDEO') {
+      <span class="icon">▶</span>
+    }
+    @if (lesson.type === 'PDF') {
+      <span class="icon">PDF</span>
+    }
+    @if (lesson.type === 'DOCUMENT') {
+      <span class="icon">DOC</span>
+    }
+  </div>
+
+  <div class="lesson-info">
+    <h4>{{ lesson.title }}</h4>
+    <span>{{ lesson.type }}</span>
+  </div>
+</button>
